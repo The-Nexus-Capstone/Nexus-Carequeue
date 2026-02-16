@@ -2,98 +2,188 @@
 
 Smart Queue Management System for Public Health Clinics
 
+[![CI Tests](https://github.com/The-Nexus-Capstone/Nexus-Carequeue/workflows/CI%20Tests/badge.svg)](https://github.com/The-Nexus-Capstone/Nexus-Carequeue/actions)
+
 ## 📖 Overview
-CareQueue enables patients to join clinic queues remotely and receive real-time updates via SMS, reducing waiting times and improving healthcare access.
+
+CareQueue is a web-based queue management system designed for public healthcare clinics in Nigeria. It enables patients to join queues remotely and receive real-time updates via SMS.
 
 **SDG Goal:** Reduced Inequalities (SDG 10)
 
-## 🎨 Design
+## 🎯 Problem Statement
 
-**Figma Prototype:** [View Interactive Design](https://www.figma.com/proto/EsRnBIeQ4fvVjmJAsN7WUQ/CareQueue?node-id=0-1&t=aiyvNc498NoBI8OW-1)
+Long waiting times and lack of transparency in public health clinics lead to:
+- Patient frustration and time wastage
+- Overcrowded waiting rooms
+- Inefficient clinic operations
 
-See [Design Documentation](docs/DESIGN.md) for complete design system, color palette, typography, and component specifications.
+## 💡 Solution
+
+CareQueue provides:
+- Remote queue joining via mobile or cyber café
+- Real-time wait time estimates (AI-powered)
+- SMS notifications
+- Staff dashboard for queue management
+- Multi-clinic support
+
+## 🏗️ Architecture
+```
+Frontend (React) ↔ Backend (Flask) ↔ AI Service (FastAPI)
+                       ↓
+                  PostgreSQL
+```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Docker Desktop
+- Docker & Docker Compose
 - Node.js 18+
 - Python 3.11+
 
 ### Run Locally
 ```bash
+# Clone repository
 git clone https://github.com/The-Nexus-Capstone/Nexus-Carequeue.git
 cd Nexus-Carequeue
+
+# Start all services
 docker-compose up
+
+# Access:
+# Frontend: http://localhost:3000
+# Backend: http://localhost:5000
+# AI Service: http://localhost:8000
 ```
 
-**Access:**
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
+### Run Individual Services
 
-## 🏗️ Tech Stack
-- **Frontend:** React.js
-- **Backend:** Python Flask
-- **Database:** PostgreSQL
-- **Deployment:** Render.com
-- **CI/CD:** GitHub Actions
+**Backend:**
+```bash
+cd backend
+pip install -r requirements.txt
+python app.py
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm start
+```
+
+**AI Service:**
+```bash
+cd ai-service
+pip install -r requirements.txt
+uvicorn api.main:app --reload --port 8000
+```
 
 ## 📁 Project Structure
 ```
-carequeue/
-├── frontend/       # React application
-├── backend/        # Flask API
-├── docs/          # Documentation
-│   └── DESIGN.md  # Design documentation & Figma link
-├── infra/         # Infrastructure configs
-└── .github/       # GitHub workflows & guidelines
+Nexus-Carequeue/
+├── frontend/          # React application
+├── backend/           # Flask API
+├── ai-service/        # FastAPI ML service
+├── data-science/      # Data analysis & ML
+├── security/          # Security policies & scans
+├── infra/             # Infrastructure as Code
+├── k8s/              # Kubernetes manifests
+├── docs/             # Documentation
+└── .github/          # CI/CD workflows
 ```
 
-## 📚 Documentation
+## 👥 Team - The Nexus (Group 27)
 
-- [Design System & Figma](docs/DESIGN.md)
-- [Contributing Guidelines](.github/CONTRIBUTING.md)
-- [Deployment Guide](docs/DEPLOYMENT.md) (coming soon)
+- **Product Manager**
+- **Frontend Engineer**
+- **Backend Engineer**
+- **DevOps Engineer**
+- **Data Scientist**
+- **Cybersecurity Lead**
+- **UI/UX Designer**
 
-## 👥 Team - The Nexus
+## 🎨 Design
 
-**Capstone Project 2025**
-- Product Manager
-- Backend Engineer
-- Frontend Engineer
-- DevOps Engineer
-- Data Scientist
-- Cybersecurity Lead
-- UI/UX Designer
+**Figma:** [View Design System](https://www.figma.com/proto/EsRnBIeQ4fvVjmJAsN7WUQ/CareQueue)
+
+See [Design Documentation](docs/design/figma.md)
+
+## 🔐 Security
+
+- JWT authentication
+- RBAC implementation
+- Input validation & sanitization
+- HTTPS enforced
+- Regular security scans
+- NDPR compliant
+
+See [Security Checklist](docs/security/security-checklist.md)
+
+## 📊 AI/ML Features
+
+- **Queue Time Prediction:** ML model predicts wait times
+- **Demand Forecasting:** Predicts busy hours
+- **Resource Optimization:** Recommends staffing levels
+
+See [AI Documentation](ai-service/README.md)
+
+## 🚢 Deployment
+
+### Staging (Render.com)
+- **URL:** https://carequeue-staging.onrender.com
+- **Branch:** `develop`
+- **Auto-deploy:** Yes
+
+### Production (AWS EC2)
+- **URL:** TBD
+- **Branch:** `main`
+- **Infrastructure:** Terraform + Ansible
+
+See [Deployment Guide](docs/architecture/architecture.md)
+
+## 🧪 Testing
+```bash
+# Run all tests
+docker-compose -f docker-compose.test.yml up
+
+# Backend tests
+cd backend && pytest
+
+# Frontend tests
+cd frontend && npm test
+```
 
 ## 🤝 Contributing
 
-We follow a structured Git workflow. See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md)
 
 ### Quick Workflow
 ```bash
-# Start new feature
 git checkout develop
 git pull origin develop
 git checkout -b feature/your-feature
-
-# Make changes, then commit
-git add .
-git commit -m "feat: your feature description"
+# ... make changes ...
+git commit -m "feat: your feature"
 git push origin feature/your-feature
-
-# Create Pull Request on GitHub
+# Create PR on GitHub
 ```
-
-## 🌐 Deployment
-
-- **Staging:** Coming soon
-- **Production:** Coming soon
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file
+MIT License - see [LICENSE](LICENSE)
+
+## 📞 Support
+
+- **Documentation:** [docs/](docs/)
+- **Issues:** [GitHub Issues](https://github.com/The-Nexus-Capstone/Nexus-Carequeue/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/The-Nexus-Capstone/Nexus-Carequeue/discussions)
+
+## 🌐 Links
+
+- **Production:** Coming soon
+- **Staging:** https://carequeue-staging.onrender.com
+- **Design:** [Figma](https://www.figma.com/proto/EsRnBIeQ4fvVjmJAsN7WUQ/CareQueue)
 
 ---
 
-**SDG 10: Reduced Inequalities | Making Healthcare Accessible for Everyone**
+**Capstone Project 2025 | SDG 10: Reduced Inequalities | The Nexus Team**
