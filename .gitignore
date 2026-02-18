@@ -73,3 +73,4 @@ saved_models/
 *.tmp
 *.bak
 *.swp
+backend/.env
