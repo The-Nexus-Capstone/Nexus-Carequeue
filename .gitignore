@@ -15,6 +15,7 @@ venv/
 env/
 ENV/
 *.egg-info/
+backend/.env
 
 # Node
 node_modules/

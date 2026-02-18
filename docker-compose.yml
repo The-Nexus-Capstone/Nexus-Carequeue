@@ -1,81 +1,44 @@
-
 services:
-  # PostgreSQL Database
-  database:
-    image: postgres:15-alpine
-    container_name: carequeue-db
-    environment:
-      POSTGRES_DB: carequeue
-      POSTGRES_USER: carequeue_user
-      POSTGRES_PASSWORD: carequeue_pass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - carequeue-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U carequeue_user"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Backend API
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: carequeue-backend
-    environment:
-      FLASK_ENV: development
-      DATABASE_URL: postgresql://carequeue_user:carequeue_pass@database:5432/carequeue
-      AI_SERVICE_URL: http://ai-service:8000
-    ports:
-      - "5000:5000"
-    depends_on:
-      database:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app
-    networks:
-      - carequeue-network
-
-  # AI Service
-  ai-service:
-    build:
-      context: ./ai-service
-      dockerfile: Dockerfile
-    container_name: carequeue-ai
-    environment:
-      AI_SERVICE_API_KEY: dev-api-key-change-in-production
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./ai-service:/app
-    networks:
-      - carequeue-network
-
-  # Frontend (uses existing code - won't affect current work)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     container_name: carequeue-frontend
-    environment:
-      REACT_APP_API_URL: http://localhost:5000
     ports:
-      - "3000:3000"
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carequeue-backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
     volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-    networks:
-      - carequeue-network
+      - ./backend:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: carequeue-db
+    environment:
+      POSTGRES_USER: carequeue
+      POSTGRES_PASSWORD: carequeue
+      POSTGRES_DB: carequeue
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
-
-networks:
-  carequeue-network:
-    driver: bridge
+  pgdata:
