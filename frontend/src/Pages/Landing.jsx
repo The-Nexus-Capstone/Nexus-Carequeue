@@ -1,17 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 1. Import useNavigate
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Landing.css";
 import heroImg from "../assets/hero.png";
-import { FaClock, FaMapMarkerAlt, FaSmile } from "react-icons/fa";
-import { FaClipboardList, FaUserMd } from "react-icons/fa";
-import { FaRegHeart } from 'react-icons/fa';
+import { 
+  FaClock, 
+  FaMapMarkerAlt, 
+  FaSmile, 
+  FaClipboardList, 
+  FaUserMd, 
+  FaRegHeart 
+} from "react-icons/fa";
 
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // 2. Initialize navigate function
+  const navigate = useNavigate();
 
   return (
     <div className="landing">
+      {/* Navigation Header */}
       <div className="nav-wrapper">
         <header className="navbar">
           <div className="nav-container">
@@ -19,67 +25,67 @@ function Landing() {
               ☰
             </div>
 
-            <div className="logo">
+            <div className="logo" onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
               <div className="logo-icon">
-                <FaRegHeart /> 
+                <FaRegHeart />
               </div>
               <div className="logo-text">
                 <h3>CareQueue</h3>
-                {/* Tagline stays visible for everyone */}
                 <span>Smart clinic access for everyone.</span>
               </div>
             </div>
 
             <nav className="nav-links">
               <button className="nav-btn active">Home</button>
-              <button className="nav-btn outline">Queue Status</button>
-              {/* 3. Add onClick to Navbar button */}
-              <button 
-                className="nav-btn outline" 
-                onClick={() => navigate("/staff-login")}
-              >
-                Staff Dashboard
+            
+              <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
+                Queue Status
+              </button>
+            
+              <button className="nav-btn outline" onClick={() => navigate("/staff-dashbord")}>
+                Staff dashboard
               </button>
             </nav>
           </div>
         </header>
 
+     
         {menuOpen && (
           <div className="mobile-menu">
             <button className="nav-btn active">Home</button>
-            <button className="nav-btn outline">Queue Status</button>
-           
-            <button 
-              className="nav-btn outline" 
-              onClick={() => navigate("/staff-login")}
-            >
-              Staff Dashboard
+            <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
+              Queue Status
+            </button>
+            <button className="nav-btn outline" onClick={() => navigate("/staff-login")}>
+              Staff Login
             </button>
           </div>
         )}
       </div>
 
+  
       <section className="hero-section">
-  <img src={heroImg} alt="Clinic" className="hero-img" />
-  <div className="hero-overlay">
-    <h1>Welcome to CareQueue</h1>
-    <p>
-      Skip the line. 
-      {/* Clickable text for Check-In only */}
-      <span 
-        className="hero-link" 
-        onClick={() => navigate("/patient/checkin")}
-        style={{ cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold' }}
-      >
-        Check in from anywhere.
-      </span>
-      <br />
-      Get real-time updates on your queue position.
-    </p>
-  </div>
-</section>
+        <img src={heroImg} alt="Clinic" className="hero-img" />
+        <div className="hero-overlay">
+          <h1>Welcome to CareQueue</h1>
+          <p>
+            Skip the line. 
+            <span 
+              className="hero-link" 
+              onClick={() => navigate("/patient/checkin")}
+              style={{ cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold' }}
+            >
+              Check in from anywhere.
+            </span>
+            <br />
+            Get real-time updates on your queue position.
+          </p>
+        </div>
+      </section>
 
+     
       <section className="action-section">
+     
         <div className="action-card">
           <div className="action-cardinfo">
             <div className="card-icon blue">
@@ -91,21 +97,26 @@ function Landing() {
             Join the queue for your clinic visit.
             Quick and easy registration.
           </p>
-          <button className="primary-btn">Check-In</button>
+          <button 
+            className="primary-btn" 
+            onClick={() => navigate("/patient/checkin")}
+          >
+            Check-In
+          </button>
         </div>
 
+       
         <div className="action-card">
           <div className="action-cardinfo">
             <div className="card-icon green">
               <FaUserMd />
             </div>
-            <h3>Staff Dashboard</h3>
+            <h3>Staff Portal</h3>
           </div>
           <p>
-            Manage clinic queue, call patients,
-            and track daily operations.
+            Authorized staff only. Login to 
+            manage clinic queues and patients.
           </p>
-          
           <button 
             className="secondary-btn" 
             onClick={() => navigate("/staff-login")}
@@ -115,6 +126,7 @@ function Landing() {
         </div>
       </section>
 
+    
       <section className="why-section">
         <h2>Why CareQueue?</h2>
         <div className="why-grid">
