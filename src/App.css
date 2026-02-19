@@ -1,0 +1,19 @@
+/* Core Reset to fix the 'Sideways' movement */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Prevents padding from breaking width */
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* Strict fix for horizontal scrolling */
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #fcfdfe; /* Matches the soft white in your image */
+  color: #1a1a1a;
+}
+
+#root {
+  width: 100%;
+}
