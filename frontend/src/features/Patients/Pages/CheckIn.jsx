@@ -1,11 +1,12 @@
 // Patients/pages/CheckIn.jsx
 import React from 'react';
 // Shared components
-import BackButton from '../../shared/BackButton';
-import Button from '../../shared/Button';
+import BackButton from '../../Shared/Components/BackButton';
+import Button from '../../Shared/Components/Button';
 // Feature components
-import ClinicSelector from '../components/ClinicSelector';
-import QueueStatusCard from '../components/QueueStatusCard';
+import ClinicSelector from '../Components/ClinicSelector';
+import QueueStatusCard from '../Components/QueueStatusCard';
+
 
 function CheckIn() {
   return (

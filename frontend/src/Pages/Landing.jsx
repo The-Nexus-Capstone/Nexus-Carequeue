@@ -4,11 +4,15 @@ import heroImg from "../assets/hero.png";
  import { FaClock, FaMapMarkerAlt, FaSmile } from "react-icons/fa";
  import { FaClipboardList, FaUserMd } from "react-icons/fa";
  import { FaRegHeart } from 'react-icons/fa';
+ import { useNavigate } from "react-router-dom";
+
 
 
 
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   return (
     <div className="landing">
@@ -80,7 +84,13 @@ function Landing() {
     Join the queue for your clinic visit.
     Quick and easy registration.
   </p>
-  <button className="primary-btn">Check-In</button>
+<button 
+  className="primary-btn"
+  onClick={() => navigate("/patient/checkin")}
+>
+  Check-In
+</button>
+
 </div>
 
 <div className="action-card">
