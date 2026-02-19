@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Landing from "./pages/Landing";
-import StaffLogin from "./features/Stuff/Pages/ Login";
+import Landing from "./Pages/Landing"; 
+import StaffLogin from "./features/Stuff/Pages/ Login"; 
+import CheckIn from "./features/Patients/Pages/CheckIn"; // Added her route back
+import "./Shared/Styles/Global.css"; 
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/staff-login" element={<StaffLogin />} />
+        <Route path="/patient/checkin" element={<CheckIn />} /> 
       </Routes>
     </BrowserRouter>
   );

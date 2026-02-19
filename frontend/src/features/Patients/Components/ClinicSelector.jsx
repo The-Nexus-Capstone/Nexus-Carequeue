@@ -1,6 +1,6 @@
 // Patients/components/ClinicSelector.jsx
 import React from 'react';
-import Select from '../../shared/Select';
+import Select from "../../../Shared/Components/Select";
 
 function ClinicSelector() {
   return (

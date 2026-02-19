@@ -48,7 +48,7 @@ function Landing() {
           <div className="mobile-menu">
             <button className="nav-btn active">Home</button>
             <button className="nav-btn outline">Queue Status</button>
-            {/* 4. Add onClick to Mobile Menu button */}
+           
             <button 
               className="nav-btn outline" 
               onClick={() => navigate("/staff-login")}
@@ -60,16 +60,24 @@ function Landing() {
       </div>
 
       <section className="hero-section">
-        <img src={heroImg} alt="Clinic" className="hero-img" />
-        <div className="hero-overlay">
-          <h1>Welcome to CareQueue</h1>
-          <p>
-            Skip the line. Check in from anywhere.
-            <br />
-            Get real-time updates on your queue position.
-          </p>
-        </div>
-      </section>
+  <img src={heroImg} alt="Clinic" className="hero-img" />
+  <div className="hero-overlay">
+    <h1>Welcome to CareQueue</h1>
+    <p>
+      Skip the line. 
+      {/* Clickable text for Check-In only */}
+      <span 
+        className="hero-link" 
+        onClick={() => navigate("/patient/checkin")}
+        style={{ cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold' }}
+      >
+        Check in from anywhere.
+      </span>
+      <br />
+      Get real-time updates on your queue position.
+    </p>
+  </div>
+</section>
 
       <section className="action-section">
         <div className="action-card">
@@ -97,7 +105,7 @@ function Landing() {
             Manage clinic queue, call patients,
             and track daily operations.
           </p>
-          {/* 5. Add onClick to Hero section action button */}
+          
           <button 
             className="secondary-btn" 
             onClick={() => navigate("/staff-login")}

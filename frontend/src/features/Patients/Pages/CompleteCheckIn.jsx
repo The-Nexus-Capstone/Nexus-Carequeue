@@ -1,11 +1,14 @@
 // Patients/pages/CompleteCheckIn.jsx
 import React from 'react';
-// Shared components
-import BackButton from '../../shared/BackButton';
-import Button from '../../shared/Button';
-// Feature components
-import CheckInForm from '../components/CheckInForm';
-import ClinicSelector from '../components/ClinicSelector';
+
+// Shared components (UI elements used across the app)
+import BackButton from '../../Shared/Components/BackButton';
+import Button from '../../Shared/Components/Button';
+
+// Feature components (specific to Patients feature)
+import CheckInForm from '../Components/CheckInForm';
+import ClinicSelector from '../Components/ClinicSelector';
+
 
 function CompleteCheckIn() {
   return (
@@ -29,4 +32,3 @@ function CompleteCheckIn() {
 }
 
 export default CompleteCheckIn;
-

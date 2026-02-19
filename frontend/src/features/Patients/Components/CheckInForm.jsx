@@ -1,7 +1,7 @@
 // Patients/components/CheckInForm.jsx
 import React from 'react';
-import Input from '../../shared/Input';
-import Select from '../../shared/Select';
+import Input from '../../Shared/Components/Input';
+import Select from '../../Shared/Components/Select';
 
 function CheckInForm() {
   return (
