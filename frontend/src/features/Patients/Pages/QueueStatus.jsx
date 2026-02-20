@@ -1,3 +1,4 @@
+
 // Patients/pages/QueueStatus.jsx
 import React from 'react';
 // Shared components
