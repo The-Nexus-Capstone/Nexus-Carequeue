@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import StaffLogin from "./features/Stuff/Pages/Login"; 
 import CheckIn from "./features/Patients/Pages/CheckIn"; 
+import QueueStatus from "./features/Patients/Pages/QueueStatus";
 import HospitalSignup from './features/Stuff/Pages/HospitalSignup';
 import JoinHospital from "./features/Stuff/Pages/JoinHospital";
 import AdminDashboard from "./features/Stuff/Pages/Dashboard";
@@ -17,6 +18,8 @@ function App() {
         <Route path="/hospital-signup" element={<HospitalSignup />} />
         <Route path="/Join-Hospital" element={<JoinHospital/>} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+       <Route path="/patient/queue-status" element={<QueueStatus />} /> 
+
       </Routes>
     </BrowserRouter>
   );
