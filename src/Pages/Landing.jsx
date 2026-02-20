@@ -17,7 +17,7 @@ function Landing() {
 
   return (
     <div className="landing">
-      {/* Navigation Header */}
+     
       <div className="nav-wrapper">
         <header className="navbar">
           <div className="nav-container">
@@ -42,9 +42,12 @@ function Landing() {
                 Queue Status
               </button>
             
-              <button className="nav-btn outline" onClick={() => navigate("/staff-dashbord")}>
-                Staff dashboard
-              </button>
+             <button 
+  className="nav-btn outline" 
+  onClick={() => navigate("/admin/dashboard")}
+>
+  Staff dashboard
+</button>
             </nav>
           </div>
         </header>
@@ -56,8 +59,8 @@ function Landing() {
             <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
               Queue Status
             </button>
-            <button className="nav-btn outline" onClick={() => navigate("/staff-login")}>
-              Staff Login
+            <button className="nav-btn outline" onClick={() => navigate("/admin/dashboard")}>
+              Staff Dashboard
             </button>
           </div>
         )}

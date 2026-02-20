@@ -80,7 +80,7 @@ function HospitalSignup() {
 
             <div className="popup-actions">
               <Button className="btn-solid-blue">Invite Staff</Button>
-              <Button className="btn-outline-blue" onClick={() => navigate('/dashboard')}>
+              <Button className="btn-outline-blue" onClick={() => navigate("/admin/dashboard")}>
                 Go to Dashboard
               </Button>
             </div>
