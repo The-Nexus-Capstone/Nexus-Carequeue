@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Shared components (UI elements used across the app)
-import BackButton from '../../Shared/Components/BackButton';
-import Button from '../../Shared/Components/Button';
+import BackButton from '../../../Shared/Components/BackButton';
+import Button from '../../../Shared/Components/Button';
 
 // Feature components (specific to Patients feature)
 import CheckInForm from '../Components/CheckInForm';

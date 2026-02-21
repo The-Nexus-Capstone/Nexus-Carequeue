@@ -2,13 +2,17 @@
 import React from 'react';
 import Input from '../../../Shared/Components/Input';
 import Select from '../../../Shared/Components/Select';
+import { useNavigate } from "react-router-dom";
 
 function CheckInForm() {
+
+  const navigate = useNavigate(); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted");
-    // later we will navigate to next step here
+
+    navigate("/patient/queue-status");
   };
 
   return (
@@ -25,7 +29,6 @@ function CheckInForm() {
         options={['Consultation', 'Follow-up', 'Vaccination']}
       />
 
-      {/* BUTTON */}
       <button type="submit">
         Complete checkIn
       </button>

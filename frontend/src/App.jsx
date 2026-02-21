@@ -3,6 +3,8 @@ import Landing from "./Pages/Landing";
 import StaffLogin from "./features/Stuff/Pages/ Login"; 
 import CheckIn from "./features/Patients/Pages/CheckIn"; // Added her route back
 import CheckInForm from "./features/Patients/Components/CheckInForm";
+import QueueStatus from "./features/Patients/Pages/QueueStatus";
+import ViewQueue from "./features/Patients/Pages/ViewQueue";
 
 import "./Shared/Styles/Global.css"; 
 
@@ -14,6 +16,8 @@ function App() {
         <Route path="/staff-login" element={<StaffLogin />} />
         <Route path="/patient/checkin" element={<CheckIn />} /> 
         <Route path="/patient/checkin/form" element={<CheckInForm />} />
+        <Route path="/patient/queue-status" element={<QueueStatus />} />
+        <Route path="/patient/view-queue" element={<ViewQueue />} />
       </Routes>
     </BrowserRouter>
   );
