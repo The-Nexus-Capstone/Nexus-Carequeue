@@ -1,18 +1,18 @@
-// Patients/components/ClinicSelector.jsx
 import React from 'react';
 import Select from "../../../Shared/Components/Select";
 
-function ClinicSelector() {
+function ClinicSelector({ selected, onSelect }) {
   return (
-    <div className="clinic-selector">
-      {/* Section title */}
+    <div className="clinic-selector" style={{ margin: "1.5rem 0" }}>
       <h2>Choose a Clinic</h2>
 
-      {/* Optional location text */}
-      <p>Location: Main Branch</p>
+      <p>Location: {selected}</p>
 
-      {/* Dropdown component for selecting clinic */}
-      <Select options={['Clinic A', 'Clinic B', 'Clinic C']} />
+      <Select
+        value={selected}
+        onChange={(e) => onSelect(e.target.value)}
+        options={['Clinic A', 'Clinic B', 'Clinic C']}
+      />
     </div>
   );
 }
