@@ -5,6 +5,7 @@ import './Auth.css';
 import Card from '../../../Shared/Components/Card';
 import Input from '../../../Shared/Components/Input';
 import Button from '../../../Shared/Components/Button';
+import BackButton from '../../../Shared/Components/BackButton';
 
 function StaffLogin() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function StaffLogin() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Trim checks for "empty spaces"
+   
     const invite = loginData.inviteCode.trim();
     const user = loginData.identifier.trim();
     const pass = loginData.password.trim();
@@ -27,8 +28,10 @@ function StaffLogin() {
 
   return (
     <div className="auth-page">
+      <BackButton onClick={() => setView('selection')} />
+
+
       <div className="auth-central-box">
-        {/* Header: Logo and Title on the same line */}
         <div className="brand-header-inline">
           <div className="brand-icon-box"><FaRegHeart /></div>
           <div className="brand-text-stack">
@@ -56,34 +59,50 @@ function StaffLogin() {
               value={loginData.identifier}
               onChange={(e) => setLoginData({...loginData, identifier: e.target.value})}
             />
-            <Input 
-              label="Password" 
-              type="password" 
-              placeholder="Enter your password"
-              value={loginData.password}
+            <Input label="Password"  type="password" placeholder="Enter your password" value={loginData.password}
               onChange={(e) => setLoginData({...loginData, password: e.target.value})}
             />
           </Card>
 
-          <Button variant="primary" type="submit">Login</Button>
+          <Button variant="primary" type="submit" className="login-submit-btn">Login</Button>
           
-          {/* Made "Sign Up" clickable and bold */}
+          
           <p className="auth-footer-text">
             Don't have an account? <span className="signup-trigger" onClick={() => setShowPopup(true)}>Sign Up</span>
           </p>
+      
         </form>
       </div>
 
-      {/* POPUP IMPLEMENTATION */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup-card" onClick={e => e.stopPropagation()}>
-            <h3>How do you want to Sign up?</h3>
-            <Button variant="primary" onClick={() => navigate('/hospital-signup')}>Sign up a new hospital</Button>
-            <Button variant="outline" onClick={() => navigate('/join-hospital')}>Join an existing hospital</Button>
-          </div>
-        </div>
-      )}
+      
+  {showPopup && (
+  <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+    <div className="popup-card" onClick={e => e.stopPropagation()}>
+      <h2 className="popup-title">How do you want to Sign up?</h2>
+      
+      <div className="popup-actions">
+        
+       <Button 
+    className="btn-solid-blue" 
+    onClick={() => {
+      setShowPopup(false); 
+      navigate('/hospital-signup'); 
+    }}
+  >
+    Sign up a new hospital
+  </Button>
+        
+       
+        <button 
+          className="popup-btn outline-blue"
+          onClick={() => navigate('/join-hospital')}
+        >
+          Join an existing hospital
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

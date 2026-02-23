@@ -1,20 +1,18 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-function BackButton() {
+function BackButton({ onClick }) {
   const navigate = useNavigate();
 
+  const handlePress = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
-    <button
-      onClick={() => navigate(-1)}
-      style={{
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        fontSize: "1rem",
-        fontWeight: "bold"
-      }}
-    >
+    <button className="back-link" onClick={handlePress} type="button">
       ← Back
     </button>
   );
