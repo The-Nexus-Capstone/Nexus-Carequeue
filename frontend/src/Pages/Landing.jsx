@@ -15,6 +15,13 @@ function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Function to handle Home click
+  const handleHomeClick = () => {
+    navigate("/");
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scrolls to top if already on page
+    setMenuOpen(false); // Closes mobile menu if open
+  };
+
   return (
     <div className="landing">
      
@@ -25,7 +32,7 @@ function Landing() {
               ☰
             </div>
 
-            <div className="logo" onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
+            <div className="logo" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
               <div className="logo-icon">
                 <FaRegHeart />
               </div>
@@ -36,26 +43,31 @@ function Landing() {
             </div>
 
             <nav className="nav-links">
-              <button className="nav-btn active">Home</button>
+              {/* Updated Home Button */}
+              <button className="nav-btn active" onClick={handleHomeClick}>
+                Home
+              </button>
             
               <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
                 Queue Status
               </button>
             
-             <button 
-  className="nav-btn outline" 
-  onClick={() => navigate("/admin/dashboard")}
->
-  Staff dashboard
-</button>
+              <button 
+                className="nav-btn outline" 
+                onClick={() => navigate("/admin/dashboard")}
+              >
+                Staff dashboard
+              </button>
             </nav>
           </div>
         </header>
 
-     
         {menuOpen && (
           <div className="mobile-menu">
-            <button className="nav-btn active">Home</button>
+            {/* Updated Mobile Home Button */}
+            <button className="nav-btn active" onClick={handleHomeClick}>
+              Home
+            </button>
             <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
               Queue Status
             </button>
@@ -66,7 +78,6 @@ function Landing() {
         )}
       </div>
 
-  
       <section className="hero-section">
         <img src={heroImg} alt="Clinic" className="hero-img" />
         <div className="hero-overlay">
@@ -86,9 +97,7 @@ function Landing() {
         </div>
       </section>
 
-     
       <section className="action-section">
-     
         <div className="action-card">
           <div className="action-cardinfo">
             <div className="card-icon blue">
@@ -108,7 +117,6 @@ function Landing() {
           </button>
         </div>
 
-       
         <div className="action-card">
           <div className="action-cardinfo">
             <div className="card-icon green">
@@ -129,7 +137,6 @@ function Landing() {
         </div>
       </section>
 
-    
       <section className="why-section">
         <h2>Why CareQueue?</h2>
         <div className="why-grid">

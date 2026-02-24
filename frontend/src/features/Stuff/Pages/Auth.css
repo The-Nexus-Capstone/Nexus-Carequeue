@@ -1,24 +1,37 @@
+/* Update these main layout containers in Auth.css */
+
 .auth-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
-  min-height: 100vh; 
-  background-color: #f8f9fa;
-  padding: 20px; 
+  justify-content: center; /* This centers the box vertically */
+  min-height: 100vh;
+  width: 100%;
+  background-color: #fcfcfc;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .auth-central-box {
-  width: 100%;
-  max-width: 450px; 
-  background: white;
+  background: #ffffff;
   padding: 40px 30px;
   border-radius: 12px;
-
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+  width: 100%;
+  max-width: 450px; /* Limits width on desktop, fits mobile */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   text-align: center;
+  z-index: 2;
+  margin: auto 0; /* Ensures it stays centered in the viewport */
 }
 
+/* Ensure the Back Button doesn't push the form down */
+.back-link-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
 
 @media (max-width: 480px) {
   .auth-page {

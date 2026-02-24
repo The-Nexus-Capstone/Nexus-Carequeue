@@ -1,59 +1,101 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegHeart, FaArrowLeft, FaRegEyeSlash } from 'react-icons/fa';
-import './JoinHospital.css';
-import Input from "../../../Shared/Components/Input";
-import Button from "../../../Shared/Components/Button";
-import AuthFooter from "../Components/AuthFooter";
-import BackButton from "../../../Shared/Components/BackButton";
+import { FaRegEyeSlash, FaRegEye, FaArrowLeft } from 'react-icons/fa'; // Added FaRegEye
+import Branding from '../../../Shared/Components/Branding';
+import BackButton from '../../../Shared/Components/BackButton';
+import Input from '../../../Shared/Components/Input';
+import Button from '../../../Shared/Components/Button';
+import AuthFooter from '../Components/AuthFooter';
+import './Auth.css';
+import './JoinHospital.css'; 
 
 function JoinHospital() {
   const navigate = useNavigate();
-  const [view, setView] = useState('selection'); // 'selection' or 'createAccount'
+  const [view, setView] = useState('selection'); 
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
 
+  // States for password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const handleContinue = () => {
-    if (inviteCode) {
-      // Logic for 1st Option: Show Invite Sent Popup
+    if (inviteCode.trim()) {
       setShowInvitePopup(true);
     } else if (selectedHospital) {
-      // Logic for 2nd Option: Move to Account Creation
       setView('createAccount');
+    } else {
+      alert("Please enter an invite code or select a hospital.");
     }
   };
 
   if (view === 'createAccount') {
     return (
       <div className="auth-page">
-        <button className="back-link" onClick={() => setView('selection')}>
-         <BackButton />
-        </button>
+        <BackButton onClick={() => setView('selection')} />
         <div className="auth-central-box">
-          <div className="brand-header-inline">
-            <div className="brand-icon-box"><FaRegHeart /></div>
-            <div className="brand-text-stack">
-               <h1>CareQueue</h1>
-               <p>Smart clinic access for everyone.</p>
-            </div>
-          </div>
+          <Branding />
           <p className="auth-sub-label">Create Staff Account</p>
           <div className="auth-form">
             <Input label="Full Name" placeholder="Enter your full name" />
             <Input label="Work Email" placeholder="Enter your work email" />
-            <div className="input-with-icon">
-              <Input label="Password" type="password" placeholder="Enter your password" />
-              <FaRegEyeSlash className="input-eye-icon" />
+            
+            {/* Password Field with Eye Toggle */}
+            <div className="input-with-icon" style={{ position: 'relative' }}>
+              <Input 
+                label="Password" 
+                type={showPassword ? "text" : "password"} 
+                placeholder="Enter your password" 
+              />
+              <span 
+                className="password-toggle-icon"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '15px',
+                  top: '60%', 
+                  transform: 'translateY(-50%)',
+                  cursor: 'pointer',
+                  color: '#666',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
             </div>
-            <div className="input-with-icon">
-              <Input label="Confirm Password" type="password" placeholder="Confirm your password" />
-              <FaRegEyeSlash className="input-eye-icon" />
+
+            {/* Confirm Password Field with Eye Toggle */}
+            <div className="input-with-icon" style={{ position: 'relative' }}>
+              <Input 
+                label="Confirm Password" 
+                type={showConfirmPassword ? "text" : "password"} 
+                placeholder="Confirm your password" 
+              />
+              <span 
+                className="password-toggle-icon"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '15px',
+                  top: '60%', 
+                  transform: 'translateY(-50%)',
+                  cursor: 'pointer',
+                  color: '#666',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
             </div>
-            <Button className="login-submit-btn" onClick={() => navigate('/dashboard')}>
+
+            <Button variant="primary" className="login-submit-btn" onClick={() => navigate('/staff-dashboard')}>
               Join Hospital
             </Button>
           </div>
+          <AuthFooter />
         </div>
       </div>
     );
@@ -61,18 +103,10 @@ function JoinHospital() {
 
   return (
     <div className="auth-page">
-      <button className="back-link" onClick={() => navigate(-1)}>
-        <FaArrowLeft /> Back
-      </button>
+      <BackButton onClick={() => navigate(-1)} />
 
       <div className="auth-central-box">
-        <div className="brand-header-inline">
-          <div className="brand-icon-box"><FaRegHeart /></div>
-          <div className="brand-text-stack">
-             <h1>CareQueue</h1>
-             <p>Smart clinic access for everyone.</p>
-          </div>
-        </div>
+        <Branding />
         <p className="auth-sub-label">Join existing Hospital</p>
 
         <div className="auth-form">
@@ -81,34 +115,40 @@ function JoinHospital() {
               label="Join with Hospital Invite Code" 
               placeholder="Enter invite code" 
               value={inviteCode}
-              onChange={(e) => { setInviteCode(e.target.value); setSelectedHospital(''); }}
+              onChange={(e) => { 
+                setInviteCode(e.target.value); 
+                setSelectedHospital(''); 
+              }}
             />
           </div>
 
           <div className="join-divider"><span>OR</span></div>
 
           <div className="join-section-box">
-            <label className="input-label">Search for Hospital</label>
+            <label className="join-input-label">Search for Hospital</label>
             <select 
               className="hospital-select"
               value={selectedHospital}
-              onChange={(e) => { setSelectedHospital(e.target.value); setInviteCode(''); }}
+              onChange={(e) => { 
+                setSelectedHospital(e.target.value); 
+                setInviteCode(''); 
+              }}
             >
               <option value="">Select a hospital</option>
-              <option value="community">Community Health Center, Ikeja</option>
+              <option value="community-ikeja">Community Health Center, Ikeja</option>
+              <option value="korle-bu">Korle Bu Teaching Hospital</option>
+              <option value="kenyatta">Kenyatta National Hospital</option>
             </select>
           </div>
 
-          <Button className="login-submit-btn" onClick={handleContinue}>
+          <Button variant="primary" className="login-submit-btn" onClick={handleContinue}>
             Continue
           </Button>
-
         </div>
-         <p className="auth-footer-text">
-                  <AuthFooter /> </p>
+
+        <AuthFooter /> 
       </div>
 
-     
       {showInvitePopup && (
         <div className="popup-overlay" onClick={() => setShowInvitePopup(false)}>
           <div className="popup-card invite-sent-card" onClick={e => e.stopPropagation()}>

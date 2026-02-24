@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Branding from '../../../Shared/Components/Branding';
 import '../Pages/AdminLayout.css';
 
 const AdminLayout = ({ children, activeTab }) => {
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const handleLogout = () => navigate('/staff-login');
+  const handleLogout = () => {
+    // Logic to clear session/token goes here
+    navigate('/staff-login');
+  };
 
   return (
     <div className="admin-container">
-      
       <aside className="admin-sidebar">
         <div className="sidebar-logo">
-          <span className="icon">💙</span>
-          <div className="logo-text">
-            <h2>CareQueue</h2>
-            <p>Smart clinic access for everyone.</p>
-          </div>
+          <Branding showTagline={true} />
         </div>
 
         <nav className="sidebar-nav">
-          <button className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}>
+          <button 
+            className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
+            onClick={() => navigate('/staff-dashboard')}
+          >
             Dashboard
           </button>
-          <button className={`nav-btn ${activeTab === 'queue' ? 'active' : ''}`}>
+          <button 
+            className={`nav-btn ${activeTab === 'queue' ? 'active' : ''}`}
+            onClick={() => navigate('/queue-management')}
+          >
             Queue Management
           </button>
         </nav>
@@ -34,18 +39,17 @@ const AdminLayout = ({ children, activeTab }) => {
         </button>
       </aside>
 
-     
       <main className="admin-main">
         <header className="admin-top-bar">
           <span className="role-label">Hospital Staff</span>
           <button className="top-logout" onClick={() => setShowLogoutModal(true)}>Logout</button>
         </header>
+        
         <div className="admin-content-inner">
           {children}
         </div>
       </main>
 
-    
       {showLogoutModal && (
         <div className="modal-overlay">
           <div className="modal-card">
