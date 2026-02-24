@@ -9,86 +9,102 @@ import BackButton from '../../../Shared/Components/BackButton';
 
 function HospitalSignup() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    hospitalName: '',
+    adminEmail: '',
+    address: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    // For submission: Basic validation check
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    console.log("Hospital Registered:", formData.hospitalName);
+    // Navigate to dashboard after "registering"
+    navigate('/staff-dashboard');
+  };
 
   return (
     <div className="auth-page">
-      <button className="back-link" onClick={() => setView('selection')}>
-         <BackButton />
-        </button>
-
-      <div className="auth-central-box">
-        <div className="brand-header-inline">
-          <div className="brand-icon-box"><FaRegHeart /></div>
-          <div className="brand-text-stack">
-             <h1>CareQueue</h1>
-             <p>Smart clinic access for everyone.</p>
-          </div>
-        </div>
-        
-        <p className="auth-sub-label">Hospital Sign up</p>
-
-        {step === 1 ? (
-          <div className="auth-form">
-            <Input label="Full Name" placeholder="Enter your full name" />
-            <Input label="Work Email" placeholder="Enter your work email" />
-            {/* Added relative wrapper for the eye icon */}
-            <div className="input-with-icon">
-              <Input label="Password" type="password" placeholder="Enter your password" />
-              <FaRegEyeSlash className="input-eye-icon" />
-            </div>
-            <div className="input-with-icon">
-              <Input label="Confirm Password" type="password" placeholder="Confirm your password" />
-              <FaRegEyeSlash className="input-eye-icon" />
-            </div>
-            
-            <Button className="login-submit-btn" onClick={() => setStep(2)}>
-              Continue
-            </Button>
-          </div>
-        ) : (
-          <div className="auth-form">
-            <Input label="Hospital Name" placeholder="Enter the hospital name" />
-            <Input label="Hospital Type" placeholder="Clinic, General, Teaching, etc." />
-            <Input label="Location" placeholder="Enter the hospital location (City & State)" />
-            <Input label="Hospital Contact Number (Optional)" placeholder="Enter the hospital contact number" />
-            
-            <Button className="login-submit-btn" onClick={() => setShowSuccess(true)}>
-              Sign up hospital
-            </Button>
-          </div>
-        )}
-
-        <p className="auth-footer-text">
-                  <AuthFooter /> </p>
+      <div className="back-link-container">
+        <BackButton onClick={() => navigate(-1)} />
       </div>
 
-      {showSuccess && (
-        <div className="popup-overlay">
-          <div className="popup-card success-card">
-            <h2 className="success-title">Your hospital has been created.</h2>
-            <p className="success-subtitle">You can now invite staff to manage.</p>
-            
-            <div className="invite-code-box">
-              <span>Invite Code: 823454KB</span>
-              <FaCopy className="copy-icon" onClick={() => {
-                navigator.clipboard.writeText("823454KB");
-                alert("Code copied!");
-              }} />
-            </div>
-
-            <div className="popup-actions">
-              <Button className="btn-solid-blue">Invite Staff</Button>
-              <Button className="btn-outline-blue" onClick={() => navigate("/admin/dashboard")}>
-                Go to Dashboard
-              </Button>
-            </div>
-          </div>
+      <div className="auth-central-box">
+        <Branding />
+        
+        <div className="auth-header-group">
+          <p className="auth-sub-label">Register Your Hospital</p>
+          <p className="auth-description">Create a digital queue for your facility</p>
         </div>
-      )}
+
+        <form className="auth-form" onSubmit={handleSignup}>
+          <Input 
+            label="Hospital Name" 
+            placeholder="e.g. General Hospital, Lagos"
+            value={formData.hospitalName}
+            onChange={(e) => setFormData({...formData, hospitalName: e.target.value})}
+            required
+          />
+
+          <Input 
+            label="Official Work Email" 
+            type="email"
+            placeholder="admin@hospital.com"
+            value={formData.adminEmail}
+            onChange={(e) => setFormData({...formData, adminEmail: e.target.value})}
+            required
+          />
+
+          <Input 
+            label="Hospital Physical Address" 
+            placeholder="Enter full address"
+            value={formData.address}
+            onChange={(e) => setFormData({...formData, address: e.target.value})}
+            required
+          />
+
+          <div className="input-with-icon">
+            <Input 
+              label="Admin Password" 
+              type="password" 
+              placeholder="Create a strong password"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              required
+            />
+            <FaRegEyeSlash className="input-eye-icon" />
+          </div>
+
+          <div className="input-with-icon">
+            <Input 
+              label="Confirm Password" 
+              type="password" 
+              placeholder="Confirm your password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              required
+            />
+            <FaRegEyeSlash className="input-eye-icon" />
+          </div>
+
+          <Button variant="primary" type="submit" className="login-submit-btn">
+            Create Hospital Account
+          </Button>
+
+          <p className="auth-footer-text">
+            Already have an account? <span className="signup-trigger" onClick={() => navigate('/staff-login')}>Login</span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
+
 
 export default HospitalSignup;

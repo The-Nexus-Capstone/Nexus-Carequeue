@@ -1,78 +1,67 @@
-/* JoinHospital.css */
 
-/* Dashed grouping boxes for the Join page */
-.search-section {
-  text-align: left;
-  margin-top: 10px;
-}
 
-.hospital-select {
-  width: 100%;
-  padding: 12px;
+.join-section-box {
+  border: 1px dashed #2196F3; /* Brand blue dashed border */
+  padding: 16px;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  background-color: #f8f9fa; /* Matches the input light grey */
-  font-size: 0.9rem;
-  color: #666;
-  appearance: none; 
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 15px;
+  margin-bottom: 0px;
+  background-color: transparent;
 }
 
-/* Specific divider for Join page */
 .join-divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 25px 0;
+  margin: 12px 0; /* Tight spacing from reference */
   color: #999;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .join-divider::before,
 .join-divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #eee;
-}
-/* Dashed boxes for the selection sections */
-.join-section-box {
-  border: 1.5px dashed #5D9CEC;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-/* The simple Invite Sent popup */
+.join-divider span {
+  padding: 0 10px;
+}
+
+.hospital-select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background-color: #f8f9fa; 
+  font-size: 0.9rem;
+  color: #333;
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+  cursor: pointer;
+}
+
+/* Success Popup Style */
 .invite-sent-card {
-  max-width: 400px;
-  padding: 40px;
+  max-width: 420px;
+  padding: 50px 30px;
   text-align: center;
+  border-radius: 8px;
+}
+
+.success-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
 }
 
 .invite-sent-text {
   color: #666;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-top: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
 }
-
-/* Ensure the divider looks clean between the dashed boxes */
-.join-divider {
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  color: #999;
-  font-weight: bold;
-  font-size: 0.8rem;
-}
-
-.join-divider::before, .join-divider::after {
-  content: "";
-  flex: 1;
-  border-bottom: 1px solid #eee;
-}
-.join-divider span { padding: 0 10px; }
