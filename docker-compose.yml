@@ -25,8 +25,6 @@ services:
         condition: service_started
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend:/app
     restart: unless-stopped
 
   celery_worker:
@@ -49,21 +47,26 @@ services:
     container_name: carequeue-ai
     ports:
       - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: unless-stopped
 
   db:
     image: postgres:16-alpine
     container_name: carequeue-db
     environment:
-      POSTGRES_DB: carequeue
-      POSTGRES_USER: carequeue_user
-      POSTGRES_PASSWORD: carequeue_pass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "carequeue_user"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -72,8 +75,9 @@ services:
   redis:
     image: redis:7-alpine
     container_name: carequeue-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     restart: unless-stopped
 
 volumes:
