@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Added FaRegEye and FaRegEyeSlash for the toggle
-import { FaRegHeart, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import './Auth.css'; 
 import Card from '../../../Shared/Components/Card';
 import Input from '../../../Shared/Components/Input';
@@ -12,7 +11,6 @@ import Branding from '../../../Shared/Components/Branding';
 function StaffLogin() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
-  // State to track password visibility
   const [showPassword, setShowPassword] = useState(false); 
   const [loginData, setLoginData] = useState({ 
     inviteCode: '', 
@@ -26,13 +24,15 @@ function StaffLogin() {
     const user = loginData.identifier.trim();
     const pass = loginData.password.trim();
 
+    // Logic: User can login via Invite Code OR (Email/Name + Password)
     if (!invite && (!user || !pass)) {
-      alert("Please enter valid login details.");
+      alert("Please enter valid login details (Invite Code or Email/Password).");
       return;
     }
     
     console.log("Login Success");
-    navigate('/staff-dashboard');
+    // Redirects to the Staff Dashboard
+    navigate('/admin/dashboard'); 
   };
 
   return (
@@ -45,6 +45,7 @@ function StaffLogin() {
         <p className="auth-sub-label">Staff Login</p>
 
         <form className="auth-form" onSubmit={handleLogin}>
+          {/* Option 1: Invite Code */}
           <Input 
             label="Login with Hospital Invite Code" 
             placeholder="Enter invite code"
@@ -54,6 +55,7 @@ function StaffLogin() {
           
           <div className="auth-divider"><span>OR</span></div>
 
+          {/* Option 2: Credentials */}
           <Card>
             <Input 
               label="Full Name or Work Email" 
@@ -61,7 +63,6 @@ function StaffLogin() {
               value={loginData.identifier}
               onChange={(e) => setLoginData({...loginData, identifier: e.target.value})}
             />
-            
             
             <div className="password-input-wrapper" style={{ position: 'relative' }}>
               <Input 
@@ -88,6 +89,7 @@ function StaffLogin() {
             </div>
           </Card>
 
+          {/* This button triggers handleLogin via the form onSubmit */}
           <Button variant="primary" type="submit" className="login-submit-btn">
             Login
           </Button>
@@ -98,6 +100,7 @@ function StaffLogin() {
         </form>
       </div>
 
+      {/* Signup Selection Popup */}
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="popup-card" onClick={e => e.stopPropagation()}>
