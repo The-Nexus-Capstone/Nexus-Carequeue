@@ -12,8 +12,8 @@ function HospitalSignup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1); 
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showInviteSentPopup, setShowInviteSentPopup] = useState(false); 
   
-  // States for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
@@ -37,12 +37,31 @@ function HospitalSignup() {
     setStep(2); 
   };
 
+  // --- FIXED LOGIC HERE ---
   const handleFinalSignup = (e) => {
     e.preventDefault();
+
+    // 1. Create the user object exactly as Dashboard.jsx expects it
+    const newUser = {
+      fullName: formData.fullName,
+      name: formData.fullName,
+      hospital_name: formData.hospitalName,
+      role: 'admin'
+    };
+
+    // 2. Save to localStorage so the Dashboard "security guard" lets you in
+    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem('token', 'temp-token-signup-success'); 
+
+    // 3. Show the success popup
     setShowSuccessPopup(true);
   };
 
-  // Centralized back navigation
+  const handleInviteStaffAction = () => {
+    setShowSuccessPopup(false);
+    setShowInviteSentPopup(true);
+  };
+
   const goBack = () => {
     if (step === 2) {
       setStep(1);
@@ -53,7 +72,6 @@ function HospitalSignup() {
 
   return (
     <div className="auth-page">
-      {/* Positioned outside the box for consistency */}
       <BackButton onClick={goBack} />
 
       <div className="auth-central-box">
@@ -61,7 +79,6 @@ function HospitalSignup() {
         <p className="auth-sub-label">Hospital Sign up</p>
 
         {step === 1 ? (
-          /* --- STEP 1: PERSONAL DETAILS --- */
           <form className="auth-form" onSubmit={handleNext}>
             <Input 
               label="Full Name" 
@@ -78,7 +95,6 @@ function HospitalSignup() {
               required 
             />
             
-            {/* Password with Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Password" 
@@ -91,20 +107,12 @@ function HospitalSignup() {
               <span 
                 className="password-toggle-icon" 
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
 
-            {/* Confirm Password with Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Confirm Password" 
@@ -117,14 +125,7 @@ function HospitalSignup() {
               <span 
                 className="password-toggle-icon" 
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
@@ -133,10 +134,8 @@ function HospitalSignup() {
             <Button variant="primary" type="submit" className="login-submit-btn">
               Continue
             </Button>
-            {/* The duplicate footer link was removed from here */}
           </form>
         ) : (
-          /* --- STEP 2: HOSPITAL DETAILS --- */
           <form className="auth-form" onSubmit={handleFinalSignup}>
             <Input 
               label="Hospital Name" 
@@ -172,13 +171,11 @@ function HospitalSignup() {
           </form>
         )}
 
-        {/* Global Footer handles the "Login" link for both steps */}
         <div className="auth-footer-wrapper">
           <AuthFooter /> 
         </div>
       </div>
 
-      {/* SUCCESS POPUP */}
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup-card hospital-success-card">
@@ -198,14 +195,30 @@ function HospitalSignup() {
             <div className="popup-vertical-actions">
               <Button 
                 className="btn-solid-blue" 
-                onClick={() => navigate('/staff-dashboard')}
+                onClick={handleInviteStaffAction}
               >
                 Invite Staff
               </Button>
-               <button className="nav-btn outline" onClick={() => navigate("/admin/dashboard")}>
+              {/* This button will now work because localStorage is set! */}
+              <button 
+                className="nav-btn outline" 
+                onClick={() => navigate("/admin/dashboard")}
+                style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '8px', marginTop: '10px', cursor: 'pointer'}}
+              >
                 Go to Dashboard
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showInviteSentPopup && (
+        <div className="popup-overlay" onClick={() => setShowInviteSentPopup(false)}>
+          <div className="popup-card invite-sent-card" onClick={e => e.stopPropagation()}>
+            <h2 className="success-title">Invite Sent!</h2>
+            <p className="invite-sent-text">
+              An invite has been sent to the Hospital Admin. Once the invite is accepted, you'll be able to manage hospital queue.
+            </p>
           </div>
         </div>
       )}
