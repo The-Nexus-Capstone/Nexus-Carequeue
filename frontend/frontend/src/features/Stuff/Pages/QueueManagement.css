@@ -1,0 +1,213 @@
+/* --- CONTAINER SETTINGS --- */
+.queue-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box; 
+  padding: 0 5px; /* Tiny buffer to prevent edge-touching on mobile */
+}
+
+.queue-header {
+  margin-bottom: 25px;
+}
+
+.queue-header h1 {
+  font-size: 24px;
+  color: #2d3748;
+  margin: 0 0 5px 0;
+}
+
+.queue-header p {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* --- TABS: FIXES SIDEWAYS LEAK --- */
+.filter-tabs-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Scroll buttons if too wide */
+  margin-bottom: 25px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 12px;
+  width: max-content; /* Critical: prevents buttons from shrinking */
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #1d70d4;
+  background: white;
+  color: #1d70d4;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-btn.active {
+  background: #1d70d4;
+  color: white;
+}
+
+/* --- PATIENT CARDS: FIXES ALIGNMENT --- */
+.patient-list-section h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #2d3748;
+}
+
+.patient-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.patient-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box; /* Keeps card inside screen */
+}
+
+/* FIX: This was the cause of the broken vertical boxes */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Keeps the tag small and aligned to top */
+  margin-bottom: 15px;
+}
+
+.patient-info h4 {
+  font-size: 16px;
+  margin: 0 0 4px 0;
+  color: #1a202c;
+}
+
+.patient-info .phone {
+  color: #718096;
+  font-size: 14px;
+}
+
+.patient-info .visit-type {
+  font-weight: 700;
+  color: #2d3748;
+  margin-top: 10px;
+  display: block;
+}
+
+/* --- STATUS TAGS --- */
+.status-tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 80px; /* Ensures consistent sizing */
+}
+
+.status-tag.in-progress {
+  background-color: #e3f2fd;
+  color: #1d70d4;
+}
+
+.status-tag.waiting {
+  background-color: #ffead1;
+  color: #f6ad55;
+}
+
+/* --- BUTTONS --- */
+.mark-done-btn, .start-consult-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.mark-done-btn {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.start-consult-btn {
+  background-color: #eef4ff;
+  color: #1d70d4;
+}
+
+/* --- ONLY MOBILE REPAIRS (768px and below) --- */
+@media (max-width: 768px) {
+  /* Prevent the whole page from sliding sideways */
+  .queue-container {
+    padding: 0 15px;
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Fixes the stretching "In Progress" boxes */
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Stops the vertical stretching */
+    width: 100%;
+  }
+
+  /* Force the status tag to stay small and neat */
+  .status-tag {
+    flex-shrink: 0;
+    padding: 4px 8px;
+    font-size: 10px;
+    height: auto;
+    align-self: flex-start;
+  }
+
+  /* Make sure patient info doesn't push the tag off-screen */
+  .patient-info {
+    flex: 1;
+    margin-right: 10px;
+    max-width: 70%;
+  }
+
+  .patient-info h4 {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Ensure buttons are easy to tap and full width */
+  .mark-done-btn, 
+  .start-consult-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  /* Keep the filters from stacking */
+  .filter-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 10px;
+  }
+
+  .filter-btn {
+    padding: 8px 15px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
