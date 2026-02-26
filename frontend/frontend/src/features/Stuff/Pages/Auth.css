@@ -1,10 +1,10 @@
-/* Update these main layout containers in Auth.css */
+
 
 .auth-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* This centers the box vertically */
+  justify-content: center; 
   min-height: 100vh;
   width: 100%;
   background-color: #fcfcfc;
@@ -18,14 +18,14 @@
   padding: 40px 30px;
   border-radius: 12px;
   width: 100%;
-  max-width: 450px; /* Limits width on desktop, fits mobile */
+  max-width: 450px; 
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   text-align: center;
   z-index: 2;
-  margin: auto 0; /* Ensures it stays centered in the viewport */
+  margin: auto 0; 
 }
 
-/* Ensure the Back Button doesn't push the form down */
+
 .back-link-container {
   position: absolute;
   top: 20px;
@@ -130,13 +130,30 @@
 .signup-trigger:hover { text-decoration: underline; }
 
 
-.popup-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+.popup-vertical-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+  flex-direction: column;
+  gap: 12px; /* This creates the equal space between them */
+  width: 100%;
+  margin-top: 20px;
+}
+
+.popup-vertical-actions button, 
+.popup-vertical-actions .nav-btn {
+  width: 100% !important; /* Forces equal length */
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Ensure the outline button matches the solid one's height and alignment */
+.nav-btn.outline {
+  background: transparent;
+  border: 1px solid #007bff; /* Match your primary blue color */
+  color: #007bff;
+  cursor: pointer;
 }
 
 .popup-card {

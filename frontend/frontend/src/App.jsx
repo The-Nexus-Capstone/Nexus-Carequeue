@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing"; 
 import StaffLogin from "./features/Stuff/Pages/Login"; 
-import CheckIn from "./features/Patients/Pages/CheckIn"; // Added her route back
+import CheckIn from "./features/Patients/Pages/CheckIn"; 
 import CheckInForm from "./features/Patients/Components/CheckInForm";
-import QueueStatus from "./features/Patients/Pages/QueueStatus";
+import QueueStatus from './features/Patients/Pages/QueueStatus';
 import ViewQueue from "./features/Patients/Pages/ViewQueue";
 import JoinHospital from "./features/Stuff/Pages/JoinHospital";
 import AdminDashboard from "./features/Stuff/Pages/Dashboard";
 import HospitalSignup from './features/Stuff/Pages/HospitalSignup';
+import QueueManagement from "./features/Stuff/Pages/QueueManagement";
 
 import "./Shared/Styles/Global.css"; 
 
@@ -23,7 +24,8 @@ function App() {
         <Route path="/patient/view-queue" element={<ViewQueue />} />
          <Route path="/Join-Hospital" element={<JoinHospital/>} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-       <Route path="/patient/queue-status" element={<QueueStatus />} /> 
+      <Route path="/queue-status" element={<QueueStatus />} /> 
+       <Route path="/admin/queue-management" element={<QueueManagement />} />
         <Route path="/hospital-signup" element={<HospitalSignup />} />
       </Routes>
     </BrowserRouter>
