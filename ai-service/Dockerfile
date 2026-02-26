@@ -2,10 +2,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir --retries 10 --timeout 120 -r requirements.txt
-
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --timeout 300 --retries 10 -r requirements.txt
 
 COPY . .
 
