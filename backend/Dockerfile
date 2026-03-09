@@ -1,15 +1,12 @@
-FROM python:3.11-slim
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package*.json ./
+RUN npm ci --only=production
 
 COPY . .
 
-RUN adduser --disabled-password --gecos "" appuser
-USER appuser
-
 EXPOSE 5000
 
-CMD ["gunicorn", "--worker-class", "eventlet", "-w", "1", "-b", "0.0.0.0:5000", "app.main:create_app()"]
+CMD ["node", "server.js"]

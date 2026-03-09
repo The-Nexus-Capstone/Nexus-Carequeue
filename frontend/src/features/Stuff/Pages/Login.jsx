@@ -21,8 +21,6 @@ function StaffLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     
-    // ── THE FIX ──────────────────────────────────────────────────────
-    // We send 'email' instead of 'identifier' to match your Python route.
     const payload = {
       invite_code: loginData.inviteCode.trim(),
       email: loginData.identifier.trim(), 
@@ -39,20 +37,13 @@ function StaffLogin() {
       const data = await response.json();
 
       if (response.ok) {
-        // 1. Store the JWT Token
         localStorage.setItem('token', data.access_token);
-        
-        // 2. Map backend keys to what your Dashboard expects
-        // Dashboard uses .fullName and .hospital_name
         const userData = {
           ...data.user,
           fullName: data.user.name, 
           hospital_name: data.user.hospital || data.user.hospital_name || "Nexus Clinic"
         };
-        
         localStorage.setItem('user', JSON.stringify(userData));
-        
-        // 3. Navigate to dashboard
         navigate('/admin/dashboard'); 
       } else {
         alert(data.error || data.message || "Login failed. Check your credentials.");
