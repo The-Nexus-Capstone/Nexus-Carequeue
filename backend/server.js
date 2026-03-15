@@ -16,10 +16,15 @@ app.get("/", (req, res) => {
 const authRoutes = require("./routes/authRoutes");
 const clinicRoutes = require("./routes/clinicRoutes");
 const queueRoutes = require("./routes/queueRoutes");
+const statsRoutes = require("./routes/statsRoutes");
+const hospitalRoutes = require("./routes/hospitalRoutes");
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/clinics", clinicRoutes);
 app.use("/api/queues", queueRoutes);
+app.use("/api/stats", statsRoutes);
+app.use("/api/hospitals", hospitalRoutes);
 
 const PORT = process.env.PORT || 5000;
 
