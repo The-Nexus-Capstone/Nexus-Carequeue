@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+
 :root {
+ --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+
   /* Primary Brand Colors */
   --primary-blue: #0066cc ;
   --primary-light: #4d94db;
@@ -40,12 +46,7 @@ html, body {
 }
 
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
 
-
-:root {
-  --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
 
 * {
   margin: 0;

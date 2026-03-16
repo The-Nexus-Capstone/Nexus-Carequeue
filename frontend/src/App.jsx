@@ -20,12 +20,18 @@ function App() {
         <Route path="/staff-login" element={<StaffLogin />} />
         <Route path="/patient/checkin" element={<CheckIn />} /> 
         <Route path="/patient/checkin/form" element={<CheckInForm />} />
+        
+    
         <Route path="/patient/queue-status" element={<QueueStatus />} />
         <Route path="/patient/view-queue" element={<ViewQueue />} />
-         <Route path="/Join-Hospital" element={<JoinHospital/>} />
+        
+    
+        <Route path="/join-hospital" element={<JoinHospital/>} />
+        
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      <Route path="/queue-status" element={<QueueStatus />} /> 
-       <Route path="/admin/queue-management" element={<QueueManagement />} />
+        
+        
+        <Route path="/admin/queue-management" element={<QueueManagement />} />
         <Route path="/hospital-signup" element={<HospitalSignup />} />
       </Routes>
     </BrowserRouter>

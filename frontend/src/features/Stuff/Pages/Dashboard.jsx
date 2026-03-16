@@ -16,7 +16,10 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
- useEffect(() => {
+  // Define API URL using environment variables for DevOps readiness
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  useEffect(() => {
     const savedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
@@ -25,16 +28,22 @@ const Dashboard = () => {
       return;
     }
 
-    setUserData(JSON.parse(savedUser));
+    // FIX: Parse JSON separately as requested by DevOps
+    try {
+      const parsed = JSON.parse(savedUser);
+      setUserData(parsed);
+    } catch (_err) {
+      console.error("Failed to parse user data");
+    }
 
-    // FETCH LIVE STATS FROM BACKEND
-    fetch('http://127.0.0.1:5000/api/stats')
+    // FETCH LIVE STATS FROM BACKEND using the dynamic API_URL
+    fetch(`${API_URL}/api/stats`)
       .then(res => res.json())
       .then(data => {
         setStats(data);
       })
-      .catch(err => console.log("Check if Python server is running on port 5000"));
-  }, [navigate]);
+      .catch(_err => console.log(`Check if server is running at ${API_URL}`));
+  }, [navigate, API_URL]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -89,7 +98,6 @@ const Dashboard = () => {
           </div>
 
           <div className="header-right-desktop">
-            {/* Staff Dashboard in the navbar as requested */}
             <span className="admin-name">Staff Dashboard</span>
             <button className="logout-link-desktop" onClick={handleLogoutClick}>Logout</button>
           </div>
@@ -97,13 +105,8 @@ const Dashboard = () => {
 
         <div className="admin-content-inner">
           <div className="dashboard-title-box">
-            {/* Your name as the main title as requested */}
             <h1>{userData?.fullName || userData?.name || "Noluthando"}</h1>
             
-            {/* FIXED HOSPITAL NAME LOGIC:
-               It checks for 'hospital_name' OR 'hospitalName' OR 'hospital'.
-               If none are found, it shows 'Nexus CareQueue' so it looks good for the PM!
-            */}
             <p>
               {userData?.hospital_name || 
                userData?.hospitalName || 
