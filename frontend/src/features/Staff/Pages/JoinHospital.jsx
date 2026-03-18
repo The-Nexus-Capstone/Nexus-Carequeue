@@ -29,7 +29,7 @@ function JoinHospital() {
 
   // Fetch real hospitals when page loads
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/hospitals')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/hospitals/`)
       .then(res => res.json())
       .then(data => setHospitals(data))
       .catch(err => console.log("Using fallback hospitals"));
@@ -46,24 +46,43 @@ function JoinHospital() {
     }
   };
 
-  const handleJoinHospital = (e) => {
+  const handleJoinHospital = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // THE FIX: Save the user session so Dashboard doesn't kick you out
-    const newUser = {
-      fullName: formData.fullName,
-      hospital_name: selectedHospital.split('|')[1] || "Selected Hospital",
-      role: 'staff'
-    };
+    const hospitalId = selectedHospital.split('|')[0];
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    localStorage.setItem('user', JSON.stringify(newUser));
-    localStorage.setItem('token', 'temp-staff-token');
+    try {
+      const response = await fetch(`${API_URL}/api/auth/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.workEmail,
+          password: formData.password,
+          hospital_id: parseInt(hospitalId),
+        })
+      });
 
-    navigate("/admin/dashboard");
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify({
+          ...data.user,
+          fullName: data.user.name,
+        }));
+        navigate("/admin/dashboard");
+      } else {
+        alert(data.error || "Failed to join hospital.");
+      }
+    } catch (error) {
+      alert("Cannot connect to backend.");
+    }
   };
 
   if (view === 'createAccount') {

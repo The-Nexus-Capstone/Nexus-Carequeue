@@ -1,19 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '../Components/AdminLayout';
 import './QueueManagement.css';
 
 const QueueManagement = () => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const patients = [
-    { id: 1, name: "John Doe", phone: "08134567356", type: "General consultation", status: "In Progress" },
-    { id: 2, name: "Kenneth Dan", phone: "08134566676", type: "Follow-up Visit", status: "In Progress" },
-    { id: 3, name: "Kate Maggie", phone: "08085566676", type: "Vaccination", status: "Waiting" },
-    { id: 4, name: "Dennis Gilead", phone: "09167566676", type: "Follow-up Visit", status: "Waiting" },
-    { id: 5, name: "Sarah Bello", phone: "07054757890", type: "Eye Test", status: "Waiting" }
-  ];
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const token = localStorage.getItem('token');
 
-  // Filter logic to match your tabs
+  const fetchQueue = () => {
+    fetch(`${API_URL}/api/queues/`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setPatients(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchQueue();
+    const interval = setInterval(fetchQueue, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleStart = async (id) => {
+    await fetch(`${API_URL}/api/queues/${id}/start`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    fetchQueue();
+  };
+
+  const handleDone = async (id) => {
+    await fetch(`${API_URL}/api/queues/${id}/done`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    fetchQueue();
+  };
+
   const filteredPatients = patients.filter(p => {
     if (activeFilter === 'Current') return p.status === 'In Progress';
     if (activeFilter === 'Queue') return p.status === 'Waiting';
@@ -24,23 +54,22 @@ const QueueManagement = () => {
     <AdminLayout activeTab="queue">
       <div className="queue-header">
         <h1>Queue Management</h1>
-        <p>Community Health Center, Ikeja</p>
       </div>
 
       <div className="filter-tabs">
-        <button 
+        <button
           className={`filter-btn ${activeFilter === 'All' ? 'active' : ''}`}
           onClick={() => setActiveFilter('All')}
         >
           All Patients
         </button>
-        <button 
+        <button
           className={`filter-btn ${activeFilter === 'Current' ? 'active' : ''}`}
           onClick={() => setActiveFilter('Current')}
         >
           Current Patients
         </button>
-        <button 
+        <button
           className={`filter-btn ${activeFilter === 'Queue' ? 'active' : ''}`}
           onClick={() => setActiveFilter('Queue')}
         >
@@ -49,31 +78,43 @@ const QueueManagement = () => {
       </div>
 
       <div className="patient-list-section">
-        <h3>Patients ({filteredPatients.length})</h3>
-        <div className="patient-cards-container">
-          {filteredPatients.map((patient) => (
-            <div key={patient.id} className="patient-card">
-              <div className="card-top">
-                <div className="patient-info">
-                  <h4>{patient.name}</h4>
-                  <p className="phone">{patient.phone}</p>
-                  <p className="visit-type">{patient.type}</p>
+        {loading ? (
+          <p>Loading queue...</p>
+        ) : filteredPatients.length === 0 ? (
+          <p style={{ color: "#777", marginTop: "2rem", textAlign: "center" }}>
+            No patients in queue right now.
+          </p>
+        ) : (
+          <>
+            <h3>Patients ({filteredPatients.length})</h3>
+            <div className="patient-cards-container">
+              {filteredPatients.map((patient) => (
+                <div key={patient.id} className="patient-card">
+                  <div className="card-top">
+                    <div className="patient-info">
+                      <h4>{patient.name}</h4>
+                      <p className="phone">{patient.phone}</p>
+                      <p className="visit-type">{patient.type}</p>
+                    </div>
+                    <span className={`status-tag ${patient.status === 'In Progress' ? 'in-progress' : 'waiting'}`}>
+                      {patient.status}
+                    </span>
+                  </div>
+
+                  {patient.status === 'In Progress' ? (
+                    <button className="mark-done-btn" onClick={() => handleDone(patient.id)}>
+                      Mark as done
+                    </button>
+                  ) : (
+                    <button className="start-consult-btn" onClick={() => handleStart(patient.id)}>
+                      Start consultation
+                    </button>
+                  )}
                 </div>
-                {/* Status Tags */}
-                <span className={`status-tag ${patient.status === 'In Progress' ? 'in-progress' : 'waiting'}`}>
-                  {patient.status}
-                </span>
-              </div>
-              
-              {/* Dynamic Buttons */}
-              {patient.status === 'In Progress' ? (
-                <button className="mark-done-btn">Mark as done</button>
-              ) : (
-                <button className="start-consult-btn">Start consultation</button>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

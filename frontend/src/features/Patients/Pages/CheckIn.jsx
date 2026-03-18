@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BackButton from "../../../Shared/Components/BackButton";
 import Button from "../../../Shared/Components/Button";
 import ClinicSelector from "../Components/ClinicSelector";
@@ -6,15 +6,26 @@ import QueueStatusCard from "../Components/QueueStatusCard";
 import { useNavigate } from "react-router-dom";
 
 function CheckIn() {
-
-  const [selectedClinic, setSelectedClinic] = useState("Clinic A");
+  const [clinics, setClinics] = useState([]);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const clinicData = {
-    "Clinic A": { status: "Not Busy", waiting: 2, waitTime: "15 mins" },
-    "Clinic B": { status: "Busy", waiting: 10, waitTime: "45 mins" },
-    "Clinic C": { status: "Busy", waiting: 6, waitTime: "30 mins" },
-  };
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/hospitals/`)
+      .then(res => res.json())
+      .then(data => {
+        setClinics(data);
+        if (data.length > 0) setSelectedClinic(data[0]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setClinics([]);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="checkin-page" style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
@@ -23,20 +34,29 @@ function CheckIn() {
       <h1>Patients Check-In</h1>
       <p>Choose a clinic, view their status and join the queue</p>
 
-      <ClinicSelector
-        selected={selectedClinic}
-        onSelect={setSelectedClinic}
-      />
+      {loading ? (
+        <p>Loading clinics...</p>
+      ) : (
+        <>
+          <ClinicSelector
+            clinics={clinics}
+            selected={selectedClinic}
+            onSelect={setSelectedClinic}
+          />
 
-      <QueueStatusCard
-        status={clinicData[selectedClinic].status}
-        waiting={clinicData[selectedClinic].waiting}
-        waitTime={clinicData[selectedClinic].waitTime}
-      />
+          {selectedClinic && (
+            <QueueStatusCard
+              status="Available"
+              waiting={0}
+              waitTime="Estimated on check-in"
+            />
+          )}
 
-      <Button onClick={() => navigate("/patient/checkin/form")}>
-        Check-In
-      </Button>
+          <Button onClick={() => navigate("/patient/checkin/form", { state: { clinic: selectedClinic } })}>
+            Check-In
+          </Button>
+        </>
+      )}
     </div>
   );
 }

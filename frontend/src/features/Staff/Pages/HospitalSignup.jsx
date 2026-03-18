@@ -37,24 +37,39 @@ function HospitalSignup() {
     setStep(2); 
   };
 
-  // --- FIXED LOGIC HERE ---
-  const handleFinalSignup = (e) => {
+  const [inviteCode, setInviteCode] = React.useState('');
+
+  const handleFinalSignup = async (e) => {
     e.preventDefault();
 
-    // 1. Create the user object exactly as Dashboard.jsx expects it
-    const newUser = {
-      fullName: formData.fullName,
-      name: formData.fullName,
-      hospital_name: formData.hospitalName,
-      role: 'admin'
-    };
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    // 2. Save to localStorage so the Dashboard "security guard" lets you in
-    localStorage.setItem('user', JSON.stringify(newUser));
-    localStorage.setItem('token', 'temp-token-signup-success'); 
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.workEmail,
+          password: formData.password,
+          hospital_name: formData.hospitalName,
+          hospital_type: formData.hospitalType,
+          location: formData.location,
+          phone: formData.contactNumber,
+        })
+      });
 
-    // 3. Show the success popup
-    setShowSuccessPopup(true);
+      const data = await response.json();
+
+      if (response.ok) {
+        setInviteCode(data.invite_code);
+        setShowSuccessPopup(true);
+      } else {
+        alert(data.error || 'Signup failed. Please try again.');
+      }
+    } catch (error) {
+      alert('Cannot connect to backend.');
+    }
   };
 
   const handleInviteStaffAction = () => {
@@ -183,10 +198,10 @@ function HospitalSignup() {
             <p className="popup-subtitle">You can now invite staff to manage.</p>
             
             <div className="invite-code-display">
-              <span>Invite Code: 823454KB</span>
+              <span>Invite Code: {inviteCode}</span>
               <button 
                 className="copy-btn-icon" 
-                onClick={() => navigator.clipboard.writeText('823454KB')}
+                onClick={() => navigator.clipboard.writeText(inviteCode)}
               >
                 <FaCopy />
               </button>
