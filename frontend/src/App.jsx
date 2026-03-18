@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing"; 
-import StaffLogin from "./features/Stuff/Pages/Login"; 
+import StaffLogin from "./features/Staff/Pages/Login"; 
 import CheckIn from "./features/Patients/Pages/CheckIn"; 
 import CheckInForm from "./features/Patients/Components/CheckInForm";
 import QueueStatus from './features/Patients/Pages/QueueStatus';
 import ViewQueue from "./features/Patients/Pages/ViewQueue";
-import JoinHospital from "./features/Stuff/Pages/JoinHospital";
-import AdminDashboard from "./features/Stuff/Pages/Dashboard";
-import HospitalSignup from './features/Stuff/Pages/HospitalSignup';
-import QueueManagement from "./features/Stuff/Pages/QueueManagement";
+import JoinHospital from "./features/Staff/Pages/JoinHospital";
+import AdminDashboard from "./features/Staff/Pages/Dashboard";
+import HospitalSignup from './features/Staff/Pages/HospitalSignup';
+import QueueManagement from "./features/Staff/Pages/QueueManagement";
 
 import "./Shared/Styles/Global.css"; 
 
