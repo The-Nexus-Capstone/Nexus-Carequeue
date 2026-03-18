@@ -83,6 +83,6 @@ def _seed_demo_data():
     print(f"[DB] Admin login: admin@carequeue.com / password123")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":pip install flask flask-sqlalchemy flask-jwt-extended flask-cors flask-socketio
     app = create_app()
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
