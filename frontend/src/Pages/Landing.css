@@ -1,9 +1,11 @@
-/* BASE */
-.landing {
-  font-family: "Segoe UI", sans-serif;
-  background: #f5f8fc;
-  color: #1e293b;
+
+.landing.page-container {
+  display: block !important; 
+  height: auto !important;
+  min-height: 100vh;
+  position: relative;
 }
+
 
 .navbar {
   width: 100%;
@@ -12,6 +14,9 @@
   padding: 10px 20px;
   box-sizing: border-box;
   z-index: 1000;
+  position: absolute; 
+  top: 0;
+  left: 0;
 }
 
 .nav-container {
@@ -20,6 +25,24 @@
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+
+@media (max-width: 768px) {
+  .nav-container {
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: 15px;
+  }
+
+  .nav-links { display: none !important; }
+  .hamburger { 
+    display: block !important; 
+    order: 1;
+  }
+  .logo { 
+    order: 2; 
+  }
 }
 
 .logo {
