@@ -22,7 +22,7 @@ def create_app():
     from app.models import db
     db.init_app(app)
 
-    CORS(app, origins=os.environ.get("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000").split(","))
+    CORS(app, origins=os.environ.get("CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:3000").split(","))
     JWTManager(app)
     socketio.init_app(app)
 

@@ -36,19 +36,19 @@ function CheckInForm() {
 
       if (response.ok) {
         navigate("/patient/queue-status", { state: {
-          queue_id:       data.queue_id,
-          position:       data.position,
+          queue_id:      data.queue_id,
+          position:      data.position,
           estimated_wait: data.estimated_wait,
           clinic:         data.clinic,
           patient_name:   formData.patient_name,
-          phone:          formData.phone,
-          reason:         formData.reason,
+          phone:           formData.phone,
+          reason:          formData.reason,
         }});
       } else {
         alert(data.error || "Failed to join queue.");
         setLoading(false);
       }
-    } catch (error) {
+    } catch (_error) { // Fixed: added underscore to unused variable
       alert("Cannot connect to backend.");
       setLoading(false);
     }

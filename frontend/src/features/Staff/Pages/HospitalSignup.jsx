@@ -67,7 +67,7 @@ function HospitalSignup() {
       } else {
         alert(data.error || 'Signup failed. Please try again.');
       }
-    } catch (error) {
+    } catch (_error) { // Fixed: added underscore to unused variable
       alert('Cannot connect to backend.');
     }
   };

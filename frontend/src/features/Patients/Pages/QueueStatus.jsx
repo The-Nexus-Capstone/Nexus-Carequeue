@@ -14,7 +14,7 @@ function QueueStatus() {
     patient_name   = 'Patient',
     phone          = '',
     reason         = 'General Consultation',
-    queue_id       = null,
+    // Fixed: removed unused queue_id
   } = data;
 
   return (

@@ -25,7 +25,7 @@ function CheckIn() {
         setClinics([]);
         setLoading(false);
       });
-  }, []);
+  }, [API_URL]); // Fixed: Added API_URL to dependencies
 
   return (
     <div className="checkin-page" style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>

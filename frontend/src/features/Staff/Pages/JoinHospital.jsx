@@ -32,7 +32,7 @@ function JoinHospital() {
     fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/hospitals/`)
       .then(res => res.json())
       .then(data => setHospitals(data))
-      .catch(err => console.log("Using fallback hospitals"));
+      .catch(_err => console.log("Using fallback hospitals")); // Fixed: added underscore
   }, []);
 
   const handleContinue = () => {
@@ -80,7 +80,7 @@ function JoinHospital() {
       } else {
         alert(data.error || "Failed to join hospital.");
       }
-    } catch (error) {
+    } catch (_error) { // Fixed: added underscore
       alert("Cannot connect to backend.");
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
 import AdminLayout from '../Components/AdminLayout';
 import './QueueManagement.css';
 
@@ -10,7 +10,8 @@ const QueueManagement = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const token = localStorage.getItem('token');
 
-  const fetchQueue = () => {
+  // Wrapped in useCallback to satisfy the dependency requirement
+  const fetchQueue = useCallback(() => {
     fetch(`${API_URL}/api/queues/`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
@@ -20,13 +21,13 @@ const QueueManagement = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  };
+  }, [API_URL, token]); // Dependencies for fetchQueue
 
   useEffect(() => {
     fetchQueue();
     const interval = setInterval(fetchQueue, 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchQueue]); // Fixed: fetchQueue is now a stable dependency
 
   const handleStart = async (id) => {
     await fetch(`${API_URL}/api/queues/${id}/start`, {
