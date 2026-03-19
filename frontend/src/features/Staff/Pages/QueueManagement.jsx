@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../Components/AdminLayout';
 import './QueueManagement.css';
 
@@ -10,8 +10,10 @@ const QueueManagement = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const token = localStorage.getItem('token');
 
-  // Wrapped in useCallback to satisfy the dependency requirement
+  // useCallback keeps fetchQueue stable so the useEffect doesn't trigger a loop
   const fetchQueue = useCallback(() => {
+    if (!token) return; // Guard clause if token is missing
+
     fetch(`${API_URL}/api/queues/`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
@@ -20,29 +22,39 @@ const QueueManagement = () => {
         setPatients(Array.isArray(data) ? data : []);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, [API_URL, token]); // Dependencies for fetchQueue
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [API_URL, token]);
 
   useEffect(() => {
     fetchQueue();
     const interval = setInterval(fetchQueue, 15000);
     return () => clearInterval(interval);
-  }, [fetchQueue]); // Fixed: fetchQueue is now a stable dependency
+  }, [fetchQueue]);
 
   const handleStart = async (id) => {
-    await fetch(`${API_URL}/api/queues/${id}/start`, {
-      method: 'PATCH',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    fetchQueue();
+    try {
+      await fetch(`${API_URL}/api/queues/${id}/start`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      fetchQueue();
+    } catch (_error) {
+      console.error("Failed to start consultation");
+    }
   };
 
   const handleDone = async (id) => {
-    await fetch(`${API_URL}/api/queues/${id}/done`, {
-      method: 'PATCH',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    fetchQueue();
+    try {
+      await fetch(`${API_URL}/api/queues/${id}/done`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      fetchQueue();
+    } catch (_error) {
+      console.error("Failed to mark as done");
+    }
   };
 
   const filteredPatients = patients.filter(p => {
