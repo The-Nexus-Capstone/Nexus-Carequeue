@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../Components/AdminLayout';
 import './QueueManagement.css';
