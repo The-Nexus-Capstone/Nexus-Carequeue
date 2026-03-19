@@ -1,4 +1,4 @@
-
+/* BASE */
 .landing.page-container {
   display: block !important; 
   height: auto !important;
@@ -6,6 +6,11 @@
   position: relative;
 }
 
+.landing {
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f8fc;
+  color: #1e293b;
+}
 
 .navbar {
   width: 100%;
@@ -14,6 +19,7 @@
   padding: 10px 20px;
   box-sizing: border-box;
   z-index: 1000;
+  /* PIN TO TOP: This stops the global CSS from centering it */
   position: absolute; 
   top: 0;
   left: 0;
@@ -25,24 +31,6 @@
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-
-@media (max-width: 768px) {
-  .nav-container {
-    display: flex !important;
-    justify-content: flex-start !important;
-    gap: 15px;
-  }
-
-  .nav-links { display: none !important; }
-  .hamburger { 
-    display: block !important; 
-    order: 1;
-  }
-  .logo { 
-    order: 2; 
-  }
 }
 
 .logo {
@@ -130,8 +118,8 @@
 @media (max-width: 768px) {
   .nav-container {
     display: flex !important;
-    flex-direction: row !important; /* Ensures side-by-side */
-    justify-content: flex-start !important; /* Aligns to left */
+    flex-direction: row !important; 
+    justify-content: flex-start !important; 
     gap: 15px !important;
   }
 
@@ -141,12 +129,12 @@
 
   .hamburger { 
     display: block !important;
-    order: 1 !important; /* Puts hamburger FIRST on left */
+    order: 1 !important; /* HAMBURGER LEFT */
     color: #0066cc;
   }
 
   .logo {
-    order: 2 !important; /* Puts logo SECOND (right of hamburger) */
+    order: 2 !important; /* LOGO RIGHT */
   }
 
   .mobile-menu {
@@ -164,6 +152,10 @@
     border: none;
     border-bottom: 1px solid #f1f5f9;
     font-size: 14px;
+  }
+
+  .hero-section {
+    margin-top: 70px; /* Offset for the absolute navbar */
   }
 
   .hero-overlay {
@@ -187,7 +179,7 @@
   }
 }
 
-/* REST OF YOUR PAGE STYLES */
+/* REST OF PAGE STYLES */
 .hero-section { position: relative; }
 .hero-img { width: 100%; height: 400px; object-fit: cover; }
 .hero-overlay { position: absolute; bottom: 20px; padding: 30px; backdrop-filter: blur(6px); width: 100%; }

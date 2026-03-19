@@ -3,16 +3,16 @@
 :root {
   --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Primary Brand Colors */
+
   --primary-blue: #0066cc;
   --primary-light: #4d94db;
   
-  /* Text Colors */
+  
   --text-white: #fafafa;
   --text-black: #1e1e1e;
   --text-grey: #f1f3f6;
   
-  /* Semantic Colors (Status) */
+  
   --success-green: #047857;
   --success-light: #cafdee;
   
@@ -49,6 +49,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
+.page-container {
+  width: 100%;
+  max-width: 100vw; 
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.page-container.landing {
+  display: block; 
+}
+
 
 h1, .staff-dashboard-title {
   font-weight: 500; 
@@ -131,13 +146,13 @@ img {
     padding: 10px !important;
   }
 
-  /* Ensures charts and tables take full width */
+  
   .chart-container, .table-wrapper, .action-card, .status-card {
     width: 100% !important;
-    overflow-x: auto !important; /* Allows table scrolling if needed */
+    overflow-x: auto !important; 
   }
 
-  /* Fixes Sidebar for mobile (hides it or stacks it) */
+  
   .sidebar {
     width: 100% !important;
     height: auto !important;
@@ -145,7 +160,7 @@ img {
   }
 
   .main-content {
-    margin-left: 0 !important; /* Removes sidebar gap */
+    margin-left: 0 !important; 
     padding: 15px !important;
   }
 }
