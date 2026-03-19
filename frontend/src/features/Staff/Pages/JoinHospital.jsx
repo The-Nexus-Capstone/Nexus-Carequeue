@@ -16,9 +16,8 @@ function JoinHospital() {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
-  const [hospitals, setHospitals] = useState([]); // Real hospitals from DB
+  const [hospitals, setHospitals] = useState([]); 
 
-  // Create Account States
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,17 +27,15 @@ function JoinHospital() {
     confirmPassword: ''
   });
 
-  // Fetch real hospitals when page loads
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/hospitals/`)
       .then(res => res.json())
       .then(data => setHospitals(data))
-      .catch(_err => console.log("Using fallback hospitals")); // Fixed: added underscore
+      .catch(() => console.log("Using fallback hospitals")); 
   }, []);
 
   const handleContinue = () => {
     if (inviteCode.trim()) {
-      // In a real app, you'd verify the code with the backend here
       setShowInvitePopup(true);
     } else if (selectedHospital) {
       setView('createAccount');
@@ -81,7 +78,7 @@ function JoinHospital() {
       } else {
         alert(data.error || "Failed to join hospital.");
       }
-    } catch (_error) { // Fixed: added underscore
+    } catch {
       alert("Cannot connect to backend.");
     }
   };
@@ -146,7 +143,7 @@ function JoinHospital() {
             </div>
 
             <Button variant="primary" type="submit" className="login-submit-btn">
-               Join Hospital
+                Join Hospital
             </Button>
           </form>
           <AuthFooter />

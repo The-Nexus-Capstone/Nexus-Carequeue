@@ -49,7 +49,7 @@ function CheckInForm() {
         alert(data.error || "Failed to join queue.");
         setLoading(false);
       }
-    } catch (_error) { // Fixed: added underscore to unused variable
+    } catch { 
       alert("Cannot connect to backend.");
       setLoading(false);
     }
