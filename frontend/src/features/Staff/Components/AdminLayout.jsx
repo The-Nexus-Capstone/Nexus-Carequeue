@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Branding from '../../../Shared/Components/Branding';
@@ -15,7 +16,7 @@ const AdminLayout = ({ children, activeTab }) => {
     <div className="admin-container">
       <header className="admin-top-bar">
         <div className="top-bar-left-wrapper">
-          <button className="mobile-menu-toggle" onClick={toggleMenu}>
+          <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
             {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
           <div className="branding-container">
@@ -41,7 +42,6 @@ const AdminLayout = ({ children, activeTab }) => {
             <button 
               className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
               onClick={() => { 
-                // FIXED: Matches path in App.jsx
                 navigate('/admin/dashboard'); 
                 setIsMobileMenuOpen(false); 
               }}
@@ -52,7 +52,6 @@ const AdminLayout = ({ children, activeTab }) => {
             <button 
               className={`nav-btn ${activeTab === 'queue' ? 'active' : ''}`}
               onClick={() => { 
-                // FIXED: Matches path in App.jsx
                 navigate('/admin/queue-management'); 
                 setIsMobileMenuOpen(false); 
               }}
@@ -79,7 +78,11 @@ const AdminLayout = ({ children, activeTab }) => {
             <h3>Are you sure you want to logout?</h3>
             <div className="modal-actions">
               <button className="modal-cancel-btn" onClick={() => setShowLogoutModal(false)}>Cancel</button>
-              <button className="modal-logout-btn" onClick={() => navigate('/')}>Logout</button>
+              <button className="modal-logout-btn" onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                navigate('/');
+              }}>Logout</button>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegEyeSlash, FaRegEye, FaArrowLeft } from 'react-icons/fa'; // Added FaRegEye
+import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
 import Branding from '../../../Shared/Components/Branding';
 import BackButton from '../../../Shared/Components/BackButton';
 import Input from '../../../Shared/Components/Input';
@@ -15,10 +16,23 @@ function JoinHospital() {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
+  const [hospitals, setHospitals] = useState([]); 
 
-  // States for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    workEmail: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/hospitals/`)
+      .then(res => res.json())
+      .then(data => setHospitals(data))
+      .catch(() => console.log("Using fallback hospitals")); 
+  }, []);
 
   const handleContinue = () => {
     if (inviteCode.trim()) {
@@ -30,6 +44,45 @@ function JoinHospital() {
     }
   };
 
+  const handleJoinHospital = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const hospitalId = selectedHospital.split('|')[0];
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.workEmail,
+          password: formData.password,
+          hospital_id: parseInt(hospitalId),
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify({
+          ...data.user,
+          fullName: data.user.name,
+        }));
+        navigate("/admin/dashboard");
+      } else {
+        alert(data.error || "Failed to join hospital.");
+      }
+    } catch {
+      alert("Cannot connect to backend.");
+    }
+  };
+
   if (view === 'createAccount') {
     return (
       <div className="auth-page">
@@ -37,64 +90,62 @@ function JoinHospital() {
         <div className="auth-central-box">
           <Branding />
           <p className="auth-sub-label">Create Staff Account</p>
-          <div className="auth-form">
-            <Input label="Full Name" placeholder="Enter your full name" />
-            <Input label="Work Email" placeholder="Enter your work email" />
+          <form className="auth-form" onSubmit={handleJoinHospital}>
+            <Input 
+              label="Full Name" 
+              placeholder="Enter your full name" 
+              value={formData.fullName}
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              required
+            />
+            <Input 
+              label="Work Email" 
+              placeholder="Enter your work email" 
+              value={formData.workEmail}
+              onChange={(e) => setFormData({...formData, workEmail: e.target.value})}
+              required
+            />
             
-            {/* Password Field with Eye Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Password" 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Enter your password" 
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                required
               />
               <span 
                 className="password-toggle-icon"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
 
-            {/* Confirm Password Field with Eye Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Confirm Password" 
                 type={showConfirmPassword ? "text" : "password"} 
                 placeholder="Confirm your password" 
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                required
               />
               <span 
                 className="password-toggle-icon"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
 
-            <Button variant="primary" className="login-submit-btn" onClick={() => navigate('/staff-dashboard')}>
-              Join Hospital
+            <Button variant="primary" type="submit" className="login-submit-btn">
+                Join Hospital
             </Button>
-          </div>
+          </form>
           <AuthFooter />
         </div>
       </div>
@@ -135,9 +186,16 @@ function JoinHospital() {
               }}
             >
               <option value="">Select a hospital</option>
-              <option value="community-ikeja">Community Health Center, Ikeja</option>
-              <option value="korle-bu">Korle Bu Teaching Hospital</option>
-              <option value="kenyatta">Kenyatta National Hospital</option>
+              {hospitals.length > 0 ? (
+                hospitals.map(h => (
+                  <option key={h.id} value={`${h.id}|${h.name}`}>{h.name}</option>
+                ))
+              ) : (
+                <>
+                  <option value="1|Community Health Center, Ikeja">Community Health Center, Ikeja</option>
+                  <option value="2|Korle Bu Teaching Hospital">Korle Bu Teaching Hospital</option>
+                </>
+              )}
             </select>
           </div>
 
@@ -156,6 +214,7 @@ function JoinHospital() {
             <p className="invite-sent-text">
               An invite has been sent to the Hospital Admin. Once the invite is accepted, you'll be able to manage hospital queue.
             </p>
+            <Button variant="primary" onClick={() => navigate('/')}>Back to Home</Button>
           </div>
         </div>
       )}

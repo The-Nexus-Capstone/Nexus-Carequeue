@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import './Auth.css'; 
-import Card from '../../../Shared/Components/Card';
+import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
+import Branding from '../../../Shared/Components/Branding';
+import BackButton from '../../../Shared/Components/BackButton';
 import Input from '../../../Shared/Components/Input';
 import Button from '../../../Shared/Components/Button';
-import BackButton from '../../../Shared/Components/BackButton';
-import Branding from '../../../Shared/Components/Branding';
+import Card from '../../../Shared/Components/Card';
+import './Auth.css';
 
 function StaffLogin() {
   const navigate = useNavigate();
@@ -18,21 +18,40 @@ function StaffLogin() {
     password: '' 
   });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const invite = loginData.inviteCode.trim();
-    const user = loginData.identifier.trim();
-    const pass = loginData.password.trim();
-
-    // Logic: User can login via Invite Code OR (Email/Name + Password)
-    if (!invite && (!user || !pass)) {
-      alert("Please enter valid login details (Invite Code or Email/Password).");
-      return;
-    }
     
-    console.log("Login Success");
-    // Redirects to the Staff Dashboard
-    navigate('/admin/dashboard'); 
+    const payload = {
+      invite_code: loginData.inviteCode.trim(),
+      email: loginData.identifier.trim(), 
+      password: loginData.password.trim()
+    };
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.access_token);
+        const userData = {
+          ...data.user,
+          fullName: data.user.name, 
+          hospital_name: data.user.hospital || data.user.hospital_name || "Nexus Clinic"
+        };
+        localStorage.setItem('user', JSON.stringify(userData));
+        navigate('/admin/dashboard'); 
+      } else {
+        alert(data.error || data.message || "Login failed. Check your credentials.");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Cannot connect to backend. Is the Python server running on port 5000?");
+    }
   };
 
   return (
@@ -41,11 +60,9 @@ function StaffLogin() {
 
       <div className="auth-central-box">
         <Branding />
-        
         <p className="auth-sub-label">Staff Login</p>
 
         <form className="auth-form" onSubmit={handleLogin}>
-          {/* Option 1: Invite Code */}
           <Input 
             label="Login with Hospital Invite Code" 
             placeholder="Enter invite code"
@@ -55,13 +72,13 @@ function StaffLogin() {
           
           <div className="auth-divider"><span>OR</span></div>
 
-          {/* Option 2: Credentials */}
           <Card>
             <Input 
-              label="Full Name or Work Email" 
-              placeholder="Enter your full name or work email"
+              label="Work Email" 
+              placeholder="Enter your work email"
               value={loginData.identifier}
               onChange={(e) => setLoginData({...loginData, identifier: e.target.value})}
+              required
             />
             
             <div className="password-input-wrapper" style={{ position: 'relative' }}>
@@ -71,6 +88,7 @@ function StaffLogin() {
                 placeholder="Enter your password" 
                 value={loginData.password}
                 onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                required
               />
               <span 
                 className="password-toggle-icon"
@@ -81,7 +99,8 @@ function StaffLogin() {
                   top: '60%', 
                   transform: 'translateY(-50%)',
                   cursor: 'pointer',
-                  color: '#666'
+                  color: '#666',
+                  zIndex: 10
                 }}
               >
                 {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
@@ -89,7 +108,6 @@ function StaffLogin() {
             </div>
           </Card>
 
-          {/* This button triggers handleLogin via the form onSubmit */}
           <Button variant="primary" type="submit" className="login-submit-btn">
             Login
           </Button>
@@ -100,7 +118,6 @@ function StaffLogin() {
         </form>
       </div>
 
-      {/* Signup Selection Popup */}
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="popup-card" onClick={e => e.stopPropagation()}>
@@ -117,7 +134,10 @@ function StaffLogin() {
               </Button>
               <button 
                 className="popup-btn outline-blue"
-                onClick={() => navigate('/join-hospital')}
+                onClick={() => {
+                  setShowPopup(false);
+                  navigate('/join-hospital');
+                }}
               >
                 Join an existing hospital
               </button>

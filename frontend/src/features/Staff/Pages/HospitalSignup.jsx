@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCopy, FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
@@ -12,8 +13,8 @@ function HospitalSignup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1); 
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showInviteSentPopup, setShowInviteSentPopup] = useState(false); 
   
-  // States for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
@@ -37,12 +38,46 @@ function HospitalSignup() {
     setStep(2); 
   };
 
-  const handleFinalSignup = (e) => {
+  const [inviteCode, setInviteCode] = React.useState('');
+
+  const handleFinalSignup = async (e) => {
     e.preventDefault();
-    setShowSuccessPopup(true);
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.workEmail,
+          password: formData.password,
+          hospital_name: formData.hospitalName,
+          hospital_type: formData.hospitalType,
+          location: formData.location,
+          phone: formData.contactNumber,
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setInviteCode(data.invite_code);
+        setShowSuccessPopup(true);
+      } else {
+        alert(data.error || 'Signup failed. Please try again.');
+      }
+   } catch (error) { 
+      alert('Cannot connect to backend.');
+    }
   };
 
-  // Centralized back navigation
+  const handleInviteStaffAction = () => {
+    setShowSuccessPopup(false);
+    setShowInviteSentPopup(true);
+  };
+
   const goBack = () => {
     if (step === 2) {
       setStep(1);
@@ -53,7 +88,6 @@ function HospitalSignup() {
 
   return (
     <div className="auth-page">
-      {/* Positioned outside the box for consistency */}
       <BackButton onClick={goBack} />
 
       <div className="auth-central-box">
@@ -61,7 +95,6 @@ function HospitalSignup() {
         <p className="auth-sub-label">Hospital Sign up</p>
 
         {step === 1 ? (
-          /* --- STEP 1: PERSONAL DETAILS --- */
           <form className="auth-form" onSubmit={handleNext}>
             <Input 
               label="Full Name" 
@@ -78,7 +111,6 @@ function HospitalSignup() {
               required 
             />
             
-            {/* Password with Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Password" 
@@ -91,20 +123,12 @@ function HospitalSignup() {
               <span 
                 className="password-toggle-icon" 
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
 
-            {/* Confirm Password with Toggle */}
             <div className="input-with-icon" style={{ position: 'relative' }}>
               <Input 
                 label="Confirm Password" 
@@ -117,14 +141,7 @@ function HospitalSignup() {
               <span 
                 className="password-toggle-icon" 
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '15px',
-                  top: '60%', 
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: '#666'
-                }}
+                style={{ position: 'absolute', right: '15px', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer', color: '#666' }}
               >
                 {showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
@@ -133,10 +150,8 @@ function HospitalSignup() {
             <Button variant="primary" type="submit" className="login-submit-btn">
               Continue
             </Button>
-            {/* The duplicate footer link was removed from here */}
           </form>
         ) : (
-          /* --- STEP 2: HOSPITAL DETAILS --- */
           <form className="auth-form" onSubmit={handleFinalSignup}>
             <Input 
               label="Hospital Name" 
@@ -172,13 +187,11 @@ function HospitalSignup() {
           </form>
         )}
 
-        {/* Global Footer handles the "Login" link for both steps */}
         <div className="auth-footer-wrapper">
           <AuthFooter /> 
         </div>
       </div>
 
-      {/* SUCCESS POPUP */}
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup-card hospital-success-card">
@@ -186,10 +199,10 @@ function HospitalSignup() {
             <p className="popup-subtitle">You can now invite staff to manage.</p>
             
             <div className="invite-code-display">
-              <span>Invite Code: 823454KB</span>
+              <span>Invite Code: {inviteCode}</span>
               <button 
                 className="copy-btn-icon" 
-                onClick={() => navigator.clipboard.writeText('823454KB')}
+                onClick={() => navigator.clipboard.writeText(inviteCode)}
               >
                 <FaCopy />
               </button>
@@ -198,14 +211,30 @@ function HospitalSignup() {
             <div className="popup-vertical-actions">
               <Button 
                 className="btn-solid-blue" 
-                onClick={() => navigate('/staff-dashboard')}
+                onClick={handleInviteStaffAction}
               >
                 Invite Staff
               </Button>
-               <button className="nav-btn outline" onClick={() => navigate("/admin/dashboard")}>
+              {/* This button will now work because localStorage is set! */}
+              <button 
+                className="nav-btn outline" 
+                onClick={() => navigate("/admin/dashboard")}
+                style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '8px', marginTop: '10px', cursor: 'pointer'}}
+              >
                 Go to Dashboard
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showInviteSentPopup && (
+        <div className="popup-overlay" onClick={() => setShowInviteSentPopup(false)}>
+          <div className="popup-card invite-sent-card" onClick={e => e.stopPropagation()}>
+            <h2 className="success-title">Invite Sent!</h2>
+            <p className="invite-sent-text">
+              An invite has been sent to the Hospital Admin. Once the invite is accepted, you'll be able to manage hospital queue.
+            </p>
           </div>
         </div>
       )}

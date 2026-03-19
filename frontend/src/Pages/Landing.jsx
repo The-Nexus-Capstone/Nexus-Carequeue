@@ -48,7 +48,7 @@ function Landing() {
                 Home
               </button>
             
-              <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
+              <button className="nav-btn outline" onClick={() => navigate("/patient/checkin")}>
                 Queue Status
               </button>
             
@@ -68,7 +68,7 @@ function Landing() {
             <button className="nav-btn active" onClick={handleHomeClick}>
               Home
             </button>
-            <button className="nav-btn outline" onClick={() => navigate("/queue-status")}>
+            <button className="nav-btn outline" onClick={() => navigate("/patient/checkin")}>
               Queue Status
             </button>
             <button className="nav-btn outline" onClick={() => navigate("/admin/dashboard")}>
