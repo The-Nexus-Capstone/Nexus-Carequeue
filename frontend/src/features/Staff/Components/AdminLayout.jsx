@@ -15,7 +15,7 @@ const AdminLayout = ({ children, activeTab }) => {
     <div className="admin-container">
       <header className="admin-top-bar">
         <div className="top-bar-left-wrapper">
-          <button className="mobile-menu-toggle" onClick={toggleMenu}>
+          <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
             {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
           <div className="branding-container">
@@ -41,7 +41,6 @@ const AdminLayout = ({ children, activeTab }) => {
             <button 
               className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
               onClick={() => { 
-                // FIXED: Matches path in App.jsx
                 navigate('/admin/dashboard'); 
                 setIsMobileMenuOpen(false); 
               }}
@@ -52,7 +51,6 @@ const AdminLayout = ({ children, activeTab }) => {
             <button 
               className={`nav-btn ${activeTab === 'queue' ? 'active' : ''}`}
               onClick={() => { 
-                // FIXED: Matches path in App.jsx
                 navigate('/admin/queue-management'); 
                 setIsMobileMenuOpen(false); 
               }}
