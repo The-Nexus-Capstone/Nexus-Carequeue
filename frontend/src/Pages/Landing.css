@@ -107,8 +107,9 @@
 @media (max-width: 768px) {
   .nav-container {
     display: flex !important;
-    justify-content: flex-start !important; /* Pushes everything to the left side */
-    gap: 15px;
+    flex-direction: row !important; /* Ensures side-by-side */
+    justify-content: flex-start !important; /* Aligns to left */
+    gap: 15px !important;
   }
 
   .nav-links { 
@@ -117,11 +118,12 @@
 
   .hamburger { 
     display: block !important;
-    order: 1; /* FORCES HAMBURGER TO THE LEFT */
+    order: 1 !important; /* Puts hamburger FIRST on left */
+    color: #0066cc;
   }
 
   .logo {
-    order: 2; /* FORCES LOGO TO THE RIGHT OF HAMBURGER */
+    order: 2 !important; /* Puts logo SECOND (right of hamburger) */
   }
 
   .mobile-menu {

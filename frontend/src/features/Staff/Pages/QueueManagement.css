@@ -4,7 +4,7 @@
   max-width: 1200px;
   margin: 0 auto;
   box-sizing: border-box; 
-  padding: 0 5px; /* Tiny buffer to prevent edge-touching on mobile */
+  padding: 0 5px; 
 }
 
 .queue-header {
