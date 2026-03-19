@@ -78,7 +78,11 @@ const AdminLayout = ({ children, activeTab }) => {
             <h3>Are you sure you want to logout?</h3>
             <div className="modal-actions">
               <button className="modal-cancel-btn" onClick={() => setShowLogoutModal(false)}>Cancel</button>
-              <button className="modal-logout-btn" onClick={() => navigate('/')}>Logout</button>
+              <button className="modal-logout-btn" onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                navigate('/');
+              }}>Logout</button>
             </div>
           </div>
         </div>
