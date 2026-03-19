@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalWaiting: 0,
     avgWaitTime: "0 mins",
-    activeDoctors: 0
+    activeDoctors: 13 
   });
 
   const navigate = useNavigate();
@@ -28,20 +28,30 @@ const Dashboard = () => {
     try {
       const parsed = JSON.parse(savedUser);
       if (parsed) {
-        // Using functional update to avoid the "cascading render" lint error
-        setUserData(() => parsed);
+        setUserData(parsed);
       }
     } catch {
       console.error("Failed to parse user data");
     }
 
-    // FETCH LIVE STATS
-    fetch(`${API_URL}/api/stats`)
+    // FIXED: Fetch from /api/queues/ to get LIVE counts
+    fetch(`${API_URL}/api/queues/`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
       .then(res => res.json())
       .then(data => {
-        setStats(data);
+        if (Array.isArray(data)) {
+          // Calculate stats from the live queue
+          const waitingCount = data.filter(p => p.status.toLowerCase() === 'waiting').length;
+          
+          setStats({
+            totalWaiting: waitingCount,
+            avgWaitTime: `${waitingCount * 10} minutes`, // 10 mins per patient
+            activeDoctors: 13
+          });
+        }
       })
-      .catch(() => console.log(`Check if server is running at ${API_URL}`));
+      .catch(() => console.log("Stats sync failed"));
   }, [navigate, API_URL]);
 
   return (
@@ -52,13 +62,15 @@ const Dashboard = () => {
           {userData?.hospital_name || 
            userData?.hospitalName || 
            userData?.hospital || 
-           "Nexus CareQueue Clinic"}
+           "Community Health Center, Ikeja"}
         </p>
       </div>
 
       <div className="status-container">
         <h3>Current Status</h3>
-        <div className="status-pill">Live</div>
+       <div className={`status-pill ${stats.totalWaiting > 5 ? 'busy' : 'not-busy'}`}>
+  {stats.totalWaiting > 5 ? "Busy" : "Not Busy"}
+</div>
 
         <div className="stat-row">
           <div className="stat-icon blue"><FaUsers /></div>
@@ -80,7 +92,7 @@ const Dashboard = () => {
           <div className="stat-icon green"><FaUserMd /></div>
           <div className="stat-info">
             <p className="stat-label">Active Staff</p>
-            <p className="stat-value">Online</p>
+            <p className="stat-value">{stats.activeDoctors} Doctors</p>
           </div>
         </div>
       </div>

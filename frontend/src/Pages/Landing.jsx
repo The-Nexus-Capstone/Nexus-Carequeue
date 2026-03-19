@@ -18,13 +18,22 @@ function Landing() {
   // Function to handle Home click
   const handleHomeClick = () => {
     navigate("/");
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scrolls to top if already on page
-    setMenuOpen(false); // Closes mobile menu if open
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setMenuOpen(false);
+  };
+
+  // Helper to handle Staff access logic
+  const handleStaffAccess = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/staff-login");
+    }
   };
 
   return (
     <div className="landing">
-     
       <div className="nav-wrapper">
         <header className="navbar">
           <div className="nav-container">
@@ -43,7 +52,6 @@ function Landing() {
             </div>
 
             <nav className="nav-links">
-              {/* Updated Home Button */}
               <button className="nav-btn active" onClick={handleHomeClick}>
                 Home
               </button>
@@ -54,9 +62,9 @@ function Landing() {
             
               <button 
                 className="nav-btn outline" 
-                onClick={() => navigate("/admin/dashboard")}
+                onClick={handleStaffAccess}
               >
-                Staff dashboard
+                Staff Dashboard
               </button>
             </nav>
           </div>
@@ -64,14 +72,13 @@ function Landing() {
 
         {menuOpen && (
           <div className="mobile-menu">
-            {/* Updated Mobile Home Button */}
             <button className="nav-btn active" onClick={handleHomeClick}>
               Home
             </button>
             <button className="nav-btn outline" onClick={() => navigate("/patient/checkin")}>
               Queue Status
             </button>
-            <button className="nav-btn outline" onClick={() => navigate("/admin/dashboard")}>
+            <button className="nav-btn outline" onClick={handleStaffAccess}>
               Staff Dashboard
             </button>
           </div>
@@ -130,9 +137,9 @@ function Landing() {
           </p>
           <button 
             className="secondary-btn" 
-            onClick={() => navigate("/staff-login")}
+            onClick={handleStaffAccess}
           >
-            Staff Login
+            Staff Dashboard
           </button>
         </div>
       </section>

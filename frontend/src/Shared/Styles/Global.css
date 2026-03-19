@@ -31,11 +31,7 @@
   --border-color: #e2e8f0;
   --card-bg: #f8fafc;
 }
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; 
-}
+
 
 html, body {
   width: 100%;
@@ -61,6 +57,33 @@ body {
 }
 
 
+@media (max-width: 768px) {
+  .nav-links, .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #ffffff;
+    height: 100vh;
+    z-index: 9999;
+  }
+
+  
+  .logout-mobile {
+    margin-top: auto;
+    background-color: #ff4d4d !important;
+    color: white !important;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+
+  img, .action-card, .status-card {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
 
 h1, .staff-dashboard-title {
   font-weight: 500; 
